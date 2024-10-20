@@ -24,7 +24,7 @@ export default function Home() {
         <LargeNumber
           className="col-start-9 row-start-3 col-span-4 row-span-2"
           title="Gasto total"
-          content="13.431,34"
+          content="3.00"
           amountType="gasto"
         />
 

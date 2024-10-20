@@ -1,17 +1,30 @@
+
+import { useAmount } from "@hooks/useAmount";
+import { OpenEyeIcon } from "@icons/OpenEye";
+import { CloseEyeIcon } from "@icons/CloseEye";
+import { IconButton } from "@components/IconButton";
+import { Money } from "../types/types";
+
 interface MoneyDisplay {
   amount: string
-  hide: boolean
+  amountType: Money
 }
 
-export const MoneyDisplay = ({ amount, hide }: MoneyDisplay) => {
-  const displayValue = hide ? `$${'*'.repeat(amount.toString().replaceAll(',', '').replaceAll('.', '').length)}` : `$${amount}`
-  // const displayValue = hide ? '$****' : `$${amount}`
-
-  // TODO: Le dejamos un numero fijo de * o dependiendo del monto?
+export const MoneyDisplay = ({ amount, amountType }: MoneyDisplay) => {
+  const { textColor, isAmountVisible, changeVisibility } = useAmount(amountType);
 
   return (
     <>
-      {displayValue}
+      <p className={`text-4xl font-semibold ${textColor}`}>
+        {
+          isAmountVisible
+            ? `$${amount}`
+            : '$*****'
+        }
+      </p>
+      <IconButton onClick={changeVisibility}>
+        {isAmountVisible ? <OpenEyeIcon className="size-6 stroke-custom-gray" /> : <CloseEyeIcon className="size-6 stroke-custom-gray" />}
+      </IconButton>
     </>
-  ) 
+  )
 }
