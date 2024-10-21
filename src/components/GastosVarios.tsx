@@ -38,10 +38,12 @@ const GastoVarioItem = ({ gasto, className }: { gasto: typeof GASTOS_VARIOS[0], 
 
 export const GastosVarios = ({ className }: { className?: string }) => {
   return (
-    <BentoItemContainer className={`${className} flex flex-col gap-7`}>
-      {GASTOS_VARIOS.map((gasto, index) => (
-        <GastoVarioItem key={index} gasto={gasto} />
-      ))}
+    <BentoItemContainer className={className}>
+      <div className="flex flex-col gap-7">
+        {GASTOS_VARIOS.map((gasto, index) => (
+          <GastoVarioItem key={index} gasto={gasto} />
+        ))}
+      </div>
     </BentoItemContainer>
   )
 }
