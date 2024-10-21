@@ -23,5 +23,11 @@ const config: Config = {
     },
   },
   plugins: [],
+  safelist: [
+    'text-custom-green',
+    'text-custom-yellow',
+    'text-custom-red',
+    'text-white',
+  ],
 };
 export default config;

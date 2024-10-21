@@ -17,6 +17,7 @@ export const useAmount = (amount: Money) => {
     } else if (amount === 'perdida') {
       return 'text-custom-red'
     }
+    return ''
   }
 
   return {
