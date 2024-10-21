@@ -1,4 +1,5 @@
 import { BentoItemContainer } from "@components/BentoItemContainer";
+import { GastosVarios } from "@components/GastosVarios";
 import { LargeNumber } from "@components/LargeNumber";
 
 export default function Home() {
@@ -14,9 +15,9 @@ export default function Home() {
           content="533.431,12"
           amountType="ingreso"
         />
-        <BentoItemContainer className="col-start-13 col-span-3 row-span-5 row-start-1">
-          <h1>Tipos de gastos</h1>
-        </BentoItemContainer>
+        
+        <GastosVarios className="col-start-13 col-span-3 row-span-5 row-start-1" />
+
         <BentoItemContainer className="col-start-16 col-span-4 row-span-5 row-start-1">
           <h1>Gastos boludos</h1>
         </BentoItemContainer>
