@@ -1,14 +1,13 @@
 import { BentoItemContainer } from "@components/BentoItemContainer";
 import { GastosVarios } from "@components/GastosVarios";
 import { LargeNumber } from "@components/LargeNumber";
+import { TablaGastos } from "@components/TablaGastos";
 
 export default function Home() {
   return (
     <main className="m-auto max-w-[1670px] h-[calc(100vh-100px)]">
       <div className="grid grid-cols-19 grid-rows-12 gap-6 p-4 w-full h-full">
-        <BentoItemContainer className="col-span-8 row-span-12 row-start-1 col-start-1">
-          <h1>Gastos diarios</h1>
-        </BentoItemContainer>
+        <TablaGastos className="col-span-8 row-span-12 row-start-1 col-start-1" />
         <LargeNumber
           className="col-start-9 col-span-4 row-span-2 row-start-1"
           title="Sueldo"
