@@ -5,6 +5,7 @@ import { BentoItemContainer } from "@components/BentoItemContainer"
 import { CalendarIcon } from "@icons/Calendar"
 import { DescriptionIcon } from "@icons/Description"
 import { DolarIcon } from "@icons/Dolar"
+import { CategoryIcon } from "@icons/Category"
 
 const initialData = [
   { date: "2022-01-01", description: "pan", category: "Supermercado", total: 100 },
@@ -40,7 +41,7 @@ export const TablaGastos = ({ className }: { className?: string }) => {
             </th>
             <th>
               <div>
-                <CalendarIcon /> Categoría
+                <CategoryIcon /> Categoría
               </div>
             </th>
             <th>
