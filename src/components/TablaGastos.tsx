@@ -6,6 +6,7 @@ import { CalendarIcon } from "@icons/Calendar"
 import { DescriptionIcon } from "@icons/Description"
 import { DolarIcon } from "@icons/Dolar"
 import { CategoryIcon } from "@icons/Category"
+import { PlusIcon } from "@icons/Plus"
 
 const initialData = [
   { date: "2022-01-01", description: "pan", category: "Supermercado", total: 100 },
@@ -24,11 +25,15 @@ export const TablaGastos = ({ className }: { className?: string }) => {
     setData(newData)
   }
 
+  const handleAdd = () => {
+    setData([...data, { date: new Date().toLocaleDateString('en-CA').split('T')[0], description: "", category: "", total: 0 }])
+  }
+
   return (
     <BentoItemContainer className={className}>
       <table className="w-full text-left border-collapse">
         <thead>
-          <tr className="[&>th]:border-l [&>th]:p-4 [&>th]:border-custom-gray text-xl [&>th]:font-normal [&>th]:w-[calc(100%/4)] [&>th>div]:flex [&>th>div]:items-center [&>th>div]:gap-2">
+          <tr className="[&>th]:border-l first:[&>th]:border-l-0 [&>th]:border-b [&>th]:p-4 [&>th]:border-custom-dark-gray text-xl [&>th]:font-normal [&>th]:w-[calc(100%/4)] [&>th>div]:flex [&>th>div]:items-center [&>th>div]:gap-2">
             <th>
               <div>
                 <CalendarIcon /> Fecha
@@ -53,22 +58,30 @@ export const TablaGastos = ({ className }: { className?: string }) => {
         </thead>
         <tbody>
           {data.map((item, index) => (
-            <tr key={item.date}>
-              {Object.entries(item).map(([key, value]) => (
-                <td key={key} className="border border-custom-gray text-custom-light-gray text-base">
-                  <input
-                    type={key === "total" ? "number" : "text"}
-                    value={value}
-                    onChange={(e) => handleEdit(index, key as keyof typeof item, e.target.value)}
-                    className="w-full bg-transparent border-none p-4"
-                  // focus:outline-none
-                  />
-                </td>
-              ))}
+            <tr key={item.date} className={`${index === data.length - 1 ? '' : 'border-b'} border-custom-dark-gray`}>
+              {Object.entries(item).map(([key, value], i) => {
+
+                console.log(data.length)
+                console.log(i)
+
+                return (
+                  <td key={key} className={`${i === 0 ? '' : 'border-l'} border-custom-dark-gray text-custom-light-gray text-base`}>
+                    <input
+                      type={key === "total" ? "number" : "text"}
+                      value={value}
+                      onChange={(e) => handleEdit(index, key as keyof typeof item, e.target.value)}
+                      className="w-full bg-transparent border-none p-4 focus:outline-none focus:bg-custom-dark-gray"
+                    />
+                  </td>
+                )
+              })}
             </tr>
           ))}
         </tbody>
       </table>
+      <button className="w-full p-1 hover:p-4 transition-all flex items-center justify-center gap-1 rounded-b-2xl border border-custom-dark-gray" onClick={handleAdd}>
+        <PlusIcon />
+      </button>
     </BentoItemContainer>
   )
 }

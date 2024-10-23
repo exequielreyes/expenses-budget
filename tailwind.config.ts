@@ -17,6 +17,7 @@ const config: Config = {
         'custom-red': "#F23645",
         'custom-yellow': "#F6A000",
         'custom-light-gray': "#ADADAD",
+        'custom-dark-gray': "#434343",
       },
       gridTemplateColumns: {
         '19': 'repeat(19, minmax(0, 1fr))',

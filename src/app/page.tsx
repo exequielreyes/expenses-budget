@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <main className="m-auto max-w-[1670px] h-[calc(100vh-100px)]">
       <div className="grid grid-cols-19 grid-rows-12 gap-6 p-4 w-full h-full">
-        <TablaGastos className="col-span-8 row-span-12 row-start-1 col-start-1" />
+        <TablaGastos className="table col-span-8 row-span-12 row-start-1 col-start-1" />
         <LargeNumber
           className="col-start-9 col-span-4 row-span-2 row-start-1"
           title="Sueldo"
@@ -24,7 +24,7 @@ export default function Home() {
         <LargeNumber
           className="col-start-9 row-start-3 col-span-4 row-span-2"
           title="Gasto total"
-          content="3.00"
+          content="3,00"
           amountType="gasto"
         />
 
