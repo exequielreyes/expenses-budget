@@ -1,32 +1,47 @@
 'use client'
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { BentoItemContainer } from "@components/BentoItemContainer"
 import { CalendarIcon } from "@icons/Calendar"
 import { DescriptionIcon } from "@icons/Description"
 import { DolarIcon } from "@icons/Dolar"
 import { CategoryIcon } from "@icons/Category"
 import { PlusIcon } from "@icons/Plus"
+import { useLocalStorage } from "@hooks/useLocalStorage"
 
-const initialData = [
-  { date: "2022-01-01", description: "pan", category: "Supermercado", total: 100 },
-  { date: "2022-01-02", description: "carne", category: "Carnicería", total: 50 },
-  { date: "2022-01-03", description: "lomito", category: "Comida", total: 150 },
-]
+// const initialData = [
+//   { date: "2022-01-01", description: "pan", category: "Supermercado", total: 100 },
+//   { date: "2022-01-02", description: "carne", category: "Carnicería", total: 50 },
+//   { date: "2022-01-03", description: "lomito", category: "Comida", total: 150 },
+// ]
+
+type Expense = {
+  date: string;
+  description: string;
+  category: string;
+  total: number;
+}
 
 export const TablaGastos = ({ className }: { className?: string }) => {
-  const [data, setData] = useState(initialData)
+  const [expenses, setExpenses] = useLocalStorage<Expense[]>({ key: 'expenses', initialValue: [] })
+  const [isMounted, setIsMounted] = useState(false) // Control del montaje
 
-  const handleEdit = (index: number, key: keyof typeof initialData[number], value: string) => {
-    console.log(index, key, value)
-    const newData = [...data]
+  useEffect(() => {
+    const storedExpenses = JSON.parse(localStorage.getItem('expenses') || '[]')
+    setExpenses(storedExpenses)
+    setIsMounted(true)
+  }, [setExpenses])
+
+  if (!isMounted) return null
+
+  const handleEdit = (index: number, key: keyof typeof expenses[number], value: string) => {
+    const newData = [...expenses]
     newData[index] = { ...newData[index], [key]: key === 'total' ? parseFloat(value) : value }
-    console.log(newData)
-    setData(newData)
+    setExpenses(newData)
   }
 
-  const handleAdd = () => {
-    setData([...data, { date: new Date().toLocaleDateString('en-CA').split('T')[0], description: "", category: "", total: 0 }])
+  const handleAddExpense = () => {
+    setExpenses([...expenses, { date: new Date().toLocaleDateString('en-CA').split('T')[0], description: "", category: "", total: 0 }])
   }
 
   return (
@@ -57,29 +72,26 @@ export const TablaGastos = ({ className }: { className?: string }) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((item, index) => (
-            <tr key={item.date} className={`${index === data.length - 1 ? '' : 'border-b'} border-custom-dark-gray`}>
-              {Object.entries(item).map(([key, value], i) => {
-
-                console.log(data.length)
-                console.log(i)
-
-                return (
-                  <td key={key} className={`${i === 0 ? '' : 'border-l'} border-custom-dark-gray text-custom-light-gray text-base`}>
-                    <input
-                      type={key === "total" ? "number" : "text"}
-                      value={value}
-                      onChange={(e) => handleEdit(index, key as keyof typeof item, e.target.value)}
-                      className="w-full bg-transparent border-none p-4 focus:outline-none focus:bg-custom-dark-gray"
-                    />
-                  </td>
-                )
-              })}
+          {expenses.map((item, index) => (
+            <tr key={`${item.date}-${index}`} className={`${index === expenses.length - 1 ? '' : 'border-b'} border-custom-dark-gray`}>
+              {Object.entries(item).map(([key, value], i) => (
+                <td key={key} className={`${i === 0 ? '' : 'border-l'} border-custom-dark-gray text-custom-light-gray text-base`}>
+                  <input
+                    type={key === "total" ? "number" : "text"}
+                    value={value}
+                    onChange={(e) => handleEdit(index, key as keyof typeof item, e.target.value)}
+                    className="w-full bg-transparent border-none p-4 focus:outline-none focus:bg-custom-dark-gray"
+                  />
+                </td>
+              ))}
             </tr>
           ))}
         </tbody>
       </table>
-      <button className="w-full p-1 hover:p-4 transition-all flex items-center justify-center gap-1 rounded-b-2xl border border-custom-dark-gray" onClick={handleAdd}>
+      <button
+        className="w-full p-1 hover:p-4 transition-all flex items-center justify-center gap-1 rounded-b-2xl border border-custom-dark-gray"
+        onClick={handleAddExpense}
+      >
         <PlusIcon />
       </button>
     </BentoItemContainer>
