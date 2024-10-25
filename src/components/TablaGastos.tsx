@@ -7,6 +7,7 @@ import { DescriptionIcon } from "@icons/Description"
 import { DolarIcon } from "@icons/Dolar"
 import { CategoryIcon } from "@icons/Category"
 import { PlusIcon } from "@icons/Plus"
+import { TrashIcon } from "@icons/Trash"
 import { useLocalStorage } from "@hooks/useLocalStorage"
 
 // const initialData = [
@@ -43,6 +44,12 @@ export const TablaGastos = ({ className }: { className?: string }) => {
   const handleAddExpense = () => {
     setExpenses([...expenses, { date: new Date().toLocaleDateString('en-CA').split('T')[0], description: "", category: "", total: 0 }])
   }
+  
+  //funcionalidad DELETE
+  const handleDeleteExpense = (index: number) => {
+    const newData = expenses.filter((_,i) => i !== index)
+    setExpenses(newData)
+  }
 
   return (
     <BentoItemContainer className={className}>
@@ -69,11 +76,12 @@ export const TablaGastos = ({ className }: { className?: string }) => {
                 <DolarIcon /> Total
               </div>
             </th>
+            <th className="w-12"></th>
           </tr>
         </thead>
         <tbody>
           {expenses.map((item, index) => (
-            <tr key={`${item.date}-${index}`} className={`${index === expenses.length - 1 ? '' : 'border-b'} border-custom-dark-gray`}>
+            <tr key={`${item.date}-${index}`} className={`group ${index === expenses.length - 1 ? '' : 'border-b'} border-custom-dark-gray`}>
               {Object.entries(item).map(([key, value], i) => (
                 <td key={key} className={`${i === 0 ? '' : 'border-l'} border-custom-dark-gray text-custom-light-gray text-base`}>
                   <input
@@ -84,6 +92,15 @@ export const TablaGastos = ({ className }: { className?: string }) => {
                   />
                 </td>
               ))}
+              {/* DELETE */}
+              <td className="border-l border-custom-dark-gray text-center">
+                  <button
+                  onClick={() => handleDeleteExpense(index)}
+                  className="hidden group-hover:inline-block text-custom-light-gray p-2"
+                  >
+                    <TrashIcon />
+                  </button>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -97,3 +114,4 @@ export const TablaGastos = ({ className }: { className?: string }) => {
     </BentoItemContainer>
   )
 }
+
