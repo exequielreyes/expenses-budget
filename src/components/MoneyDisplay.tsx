@@ -1,9 +1,8 @@
 
 import { useAmount } from "@hooks/useAmount";
-import { OpenEyeIcon } from "@icons/OpenEye";
-import { CloseEyeIcon } from "@icons/CloseEye";
-import { IconButton } from "@components/IconButton";
 import { Money } from "../types/types";
+import { IconButton } from "@components";
+import { CloseEyeIcon, OpenEyeIcon } from "@icons";
 
 interface MoneyDisplay {
   amount: string

@@ -1,47 +1,22 @@
 'use client'
 
-import { useEffect, useState } from "react"
-import { BentoItemContainer } from "@components/BentoItemContainer"
-import { CalendarIcon } from "@icons/Calendar"
-import { DescriptionIcon } from "@icons/Description"
-import { DolarIcon } from "@icons/Dolar"
-import { CategoryIcon } from "@icons/Category"
-import { PlusIcon } from "@icons/Plus"
-import { useLocalStorage } from "@hooks/useLocalStorage"
-
-// const initialData = [
-//   { date: "2022-01-01", description: "pan", category: "Supermercado", total: 100 },
-//   { date: "2022-01-02", description: "carne", category: "Carnicería", total: 50 },
-//   { date: "2022-01-03", description: "lomito", category: "Comida", total: 150 },
-// ]
-
-type Expense = {
-  date: string;
-  description: string;
-  category: string;
-  total: number;
-}
+import { getDate } from "@utils"
+import { BentoItemContainer } from "@components"
+import { CalendarIcon, CategoryIcon, DescriptionIcon, DolarIcon, PlusIcon } from "@icons"
+import { useExpenses } from "@hooks"
 
 export const TablaGastos = ({ className }: { className?: string }) => {
-  const [expenses, setExpenses] = useLocalStorage<Expense[]>({ key: 'expenses', initialValue: [] })
-  const [isMounted, setIsMounted] = useState(false) // Control del montaje
-
-  useEffect(() => {
-    const storedExpenses = JSON.parse(localStorage.getItem('expenses') || '[]')
-    setExpenses(storedExpenses)
-    setIsMounted(true)
-  }, [setExpenses])
-
-  if (!isMounted) return null
+  
+  const { expenses, updateExpenses } = useExpenses()
 
   const handleEdit = (index: number, key: keyof typeof expenses[number], value: string) => {
     const newData = [...expenses]
     newData[index] = { ...newData[index], [key]: key === 'total' ? parseFloat(value) : value }
-    setExpenses(newData)
+    updateExpenses(newData)
   }
 
   const handleAddExpense = () => {
-    setExpenses([...expenses, { date: new Date().toLocaleDateString('en-CA').split('T')[0], description: "", category: "", total: 0 }])
+    updateExpenses([...expenses, { date: getDate(), description: "", category: "", total: 0 }])
   }
 
   return (

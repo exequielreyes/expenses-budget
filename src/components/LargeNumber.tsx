@@ -1,9 +1,8 @@
 'use client'
 
-import { BentoItemContainer } from "@components/BentoItemContainer";
-import { EditIcon } from "@/icons/Edit";
+import { EditIcon } from "@/icons";
 import { Money } from "@/types/types";
-import { MoneyDisplay } from "./MoneyDisplay";
+import { MoneyDisplay, BentoItemContainer } from "@components";
 
 type LargeNumber = {
   className?: string;

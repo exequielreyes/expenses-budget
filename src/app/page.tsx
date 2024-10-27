@@ -1,9 +1,43 @@
-import { BentoItemContainer } from "@components/BentoItemContainer";
-import { GastosVarios } from "@components/GastosVarios";
-import { LargeNumber } from "@components/LargeNumber";
-import { TablaGastos } from "@components/TablaGastos";
+'use client'
+
+import { BentoItemContainer, GastosVarios, LargeNumber, TablaGastos } from "@components";
+import { useGlobalContext } from "@context/GlobalContext";
+import { decryptData, generateKey, getCryptoKeyFromDB, getDataFromLocalStorage, saveCryptoKeyToDB } from "@utils";
+import { useEffect } from "react";
 
 export default function Home() {
+
+  const { setExpenses, setCryptoKey } = useGlobalContext()
+
+  useEffect(() => {
+
+    const initializeCryptoKey = async () => {
+      let cryptoKey = await getCryptoKeyFromDB()
+    
+      if (!cryptoKey) {
+        cryptoKey = await generateKey()
+        await saveCryptoKeyToDB(cryptoKey)
+      } else {
+      }
+    
+      return cryptoKey as CryptoKey
+    }
+
+    const getExpenses = async () => {
+      const cryptoKey = await initializeCryptoKey()
+      await setCryptoKey(cryptoKey)
+      const encryptedExpenses = await getDataFromLocalStorage<{ encryptedData: string, iv: string }>('expenses')
+     
+      if(encryptedExpenses) {
+        const { encryptedData, iv } = encryptedExpenses
+        const decryptedExpenses = await decryptData(cryptoKey as CryptoKey, encryptedData, iv)
+        setExpenses(decryptedExpenses)
+      }
+    }
+
+    getExpenses()
+  }, [])
+
   return (
     <main className="m-auto max-w-[1670px] h-[calc(100vh-100px)]">
       <div className="grid grid-cols-19 grid-rows-12 gap-6 p-4 w-full h-full">
@@ -14,7 +48,7 @@ export default function Home() {
           content="533.431,12"
           amountType="ingreso"
         />
-        
+
         <GastosVarios className="col-start-13 col-span-3 row-span-5 row-start-1" />
 
         <BentoItemContainer className="col-start-16 col-span-4 row-span-5 row-start-1">

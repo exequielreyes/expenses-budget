@@ -1,7 +1,7 @@
 'use client'
 
 import { useAmount } from "@hooks/useAmount";
-import { BentoItemContainer } from "./BentoItemContainer";
+import { BentoItemContainer } from "@components";
 import { Money } from "../types/types";
 
 const GASTOS_VARIOS = [
