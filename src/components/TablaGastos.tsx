@@ -2,7 +2,7 @@
 
 import { getDate } from "@utils"
 import { BentoItemContainer } from "@components"
-import { CalendarIcon, CategoryIcon, DescriptionIcon, DolarIcon, PlusIcon } from "@icons"
+import { CalendarIcon, CategoryIcon, DescriptionIcon, DolarIcon, PlusIcon, TrashIcon } from "@icons"
 import { useExpenses } from "@hooks"
 
 export const TablaGastos = ({ className }: { className?: string }) => {
@@ -17,6 +17,12 @@ export const TablaGastos = ({ className }: { className?: string }) => {
 
   const handleAddExpense = () => {
     updateExpenses([...expenses, { date: getDate(), description: "", category: "", total: 0 }])
+  }
+  
+  //funcionalidad DELETE
+  const handleDeleteExpense = (index: number) => {
+    const newData = expenses.filter((_,i) => i !== index)
+    updateExpenses(newData)
   }
 
   return (
@@ -44,11 +50,12 @@ export const TablaGastos = ({ className }: { className?: string }) => {
                 <DolarIcon /> Total
               </div>
             </th>
+            <th className="w-12"></th>
           </tr>
         </thead>
         <tbody>
           {expenses.map((item, index) => (
-            <tr key={`${item.date}-${index}`} className={`${index === expenses.length - 1 ? '' : 'border-b'} border-custom-dark-gray`}>
+            <tr key={`${item.date}-${index}`} className={`group ${index === expenses.length - 1 ? '' : 'border-b'} border-custom-dark-gray`}>
               {Object.entries(item).map(([key, value], i) => (
                 <td key={key} className={`${i === 0 ? '' : 'border-l'} border-custom-dark-gray text-custom-light-gray text-base`}>
                   <input
@@ -59,6 +66,15 @@ export const TablaGastos = ({ className }: { className?: string }) => {
                   />
                 </td>
               ))}
+              {/* DELETE */}
+              <td className="border-l border-custom-dark-gray text-center">
+                  <button
+                  onClick={() => handleDeleteExpense(index)}
+                  className="hidden group-hover:inline-block text-custom-light-gray p-2"
+                  >
+                    <TrashIcon />
+                  </button>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -72,3 +88,4 @@ export const TablaGastos = ({ className }: { className?: string }) => {
     </BentoItemContainer>
   )
 }
+
