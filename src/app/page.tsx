@@ -2,13 +2,15 @@
 
 import { BentoItemContainer, GastosVarios, LargeNumber, TablaGastos } from "@components";
 import { useEncrypt, useExpenses, useGastosVarios } from "@hooks";
+import { useIngresos } from "@hooks/useIngresos";
 import { decryptData, generateKey, getCryptoKeyFromDB, getDataFromLocalStorage, saveCryptoKeyToDB } from "@utils";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export default function Home() {
 
   const { setExpenses } = useExpenses()
   const { updateGastoDiario, getTotalExpense } = useGastosVarios()
+  const { sueldo, updateSueldo } = useIngresos()
   const { setCryptoKey } = useEncrypt()
 
   useEffect(() => {
@@ -29,20 +31,24 @@ export default function Home() {
       const cryptoKey = await initializeCryptoKey()
       await setCryptoKey(cryptoKey)
       const encryptedExpenses = await getDataFromLocalStorage<{ encryptedData: string, iv: string }>('expenses')
+      const encrtptedIngresos = await getDataFromLocalStorage<{ encryptedData: string, iv: string }>('ingresos')
      
       if(encryptedExpenses) {
         const { encryptedData, iv } = encryptedExpenses
         const decryptedExpenses = await decryptData(cryptoKey as CryptoKey, encryptedData, iv)
-        
         setExpenses(decryptedExpenses)
         updateGastoDiario(getTotalExpense(decryptedExpenses))
+      }
+
+      if(encrtptedIngresos) {
+        const { encryptedData, iv } = encrtptedIngresos
+        const decryptedIngresos = await decryptData(cryptoKey as CryptoKey, encryptedData, iv)
+        updateSueldo(decryptedIngresos[0].amount)
       }
     }
 
     getExpenses()
   }, [])
-
-  const [sueldo, setSueldo] = useState<number>(533123.32)
 
   return (
     <main className="m-auto max-w-[1670px] h-[calc(100vh-100px)]">
@@ -52,7 +58,7 @@ export default function Home() {
           className="col-start-9 col-span-4 row-span-2 row-start-1"
           title="Sueldo"
           amount={sueldo}
-          setAmount={setSueldo}
+          setAmount={updateSueldo}
           amountType="ingreso"
           edit
         />

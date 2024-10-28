@@ -5,7 +5,7 @@ import { Money } from "../types/types";
 import { IconButton } from "@components";
 import { CloseEyeIcon, OpenEyeIcon } from "@icons";
 import NumberFlow from "@number-flow/react";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { parseCurrency, priceFormat } from "@utils";
 
 interface MoneyDisplay {
@@ -18,6 +18,10 @@ interface MoneyDisplay {
 export const MoneyDisplay = ({ amount, amountType, setAmount, edit = false }: MoneyDisplay) => {
   const { textColor, isAmountVisible, changeVisibility } = useAmount(amountType);
   const [inputValue, setInputValue] = useState<string>(priceFormat(parseCurrency(amount.toString())));
+  
+  useEffect(() => {
+    setInputValue(priceFormat(parseCurrency(amount.toString())))
+  }, [amount])
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value
@@ -55,7 +59,7 @@ export const MoneyDisplay = ({ amount, amountType, setAmount, edit = false }: Mo
           <p className={`text-4xl font-semibold ${edit ? '' : 'pt-[7px]'} ${textColor}`}>$ *****</p>
       }
       <IconButton onClick={changeVisibility}>
-        {isAmountVisible ? <OpenEyeIcon className="size-6 stroke-custom-gray" /> : <CloseEyeIcon className="size-6 stroke-custom-gray" />}
+        {isAmountVisible ? <OpenEyeIcon className="size-6 stroke-custom-gray transition-all duration-200 hover:stroke-custom-light-gray" /> : <CloseEyeIcon className="size-6 stroke-custom-gray transition-all duration-200 hover:stroke-custom-light-gray" />}
       </IconButton>
     </>
   )

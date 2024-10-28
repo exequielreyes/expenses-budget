@@ -2,19 +2,19 @@
 
 import { useAmount, useGastosVarios } from "@hooks";
 import { BentoItemContainer } from "@components";
-import { GastoVario, Money } from "../types/types";
+import { Transaccion, Money } from "../types/types";
 import NumberFlow from "@number-flow/react";
 
 // TODO: Refactorizar esto
 
-const GastoVarioItem = ({ gasto, className }: { gasto: GastoVario, className?: string }) => {
+const GastoVarioItem = ({ gasto, className }: { gasto: Transaccion, className?: string }) => {
   const { textColor } = useAmount(gasto.amountType as Money)
 
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
       <h2 className="font-medium text-xl text-custom-light-gray">{gasto.title}</h2>
       <NumberFlow
-        value={gasto.content}
+        value={gasto.amount}
         format={{ style: 'currency', currency: 'ARS'}}
         className={`text-3xl font-semibold ${textColor}`}
       />

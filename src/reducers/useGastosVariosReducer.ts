@@ -4,13 +4,13 @@ import { gastosVariosReducer, initialGastos } from "@reducers"
 export const useGastosVariosReducer = () => {
   const [gastosVarios, dispatch] = useReducer(gastosVariosReducer, initialGastos)
 
-  const updateGasto = (title: string, newContent: number) => {
-    dispatch({ type: 'UPDATE_GASTOS_VARIOS', payload: { title, newContent } })
+  const updateGasto = (title: string, newAmount: number) => {
+    dispatch({ type: 'UPDATE_GASTOS_VARIOS', payload: { title, newAmount } })
   }
 
-  const updateGastoDiario = useCallback((newContent: number) => updateGasto("Gastos diarios", newContent), [])
-  const updateGastoBoludo = useCallback((newContent: number) => updateGasto("Gastos boludos", newContent), [])
-  const updateGastoFijo = useCallback((newContent: number) => updateGasto("Gastos fijos", newContent), [])
+  const updateGastoDiario = useCallback((newAmount: number) => updateGasto("Gastos diarios", newAmount), [])
+  const updateGastoBoludo = useCallback((newAmount: number) => updateGasto("Gastos boludos", newAmount), [])
+  const updateGastoFijo = useCallback((newAmount: number) => updateGasto("Gastos fijos", newAmount), [])
 
   return { gastosVarios, updateGastoDiario, updateGastoBoludo, updateGastoFijo }
 }

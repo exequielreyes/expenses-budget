@@ -1,19 +1,19 @@
-import { GastosVarios } from "../types/types";
+import { Transacciones } from "../types/types";
 
-type Action = { type: 'UPDATE_GASTOS_VARIOS'; payload: { title: string; newContent: number } }
+type Action = { type: 'UPDATE_GASTOS_VARIOS'; payload: { title: string; newAmount: number } }
 
-export const initialGastos: GastosVarios = [
-  { title: "Gastos fijos", content: 0, amountType: "gasto" },
-  { title: "Gastos diarios", content: 0, amountType: "gasto" },
-  { title: "Gastos boludos", content: 0, amountType: "gasto" }
+export const initialGastos: Transacciones = [
+  { title: "Gastos fijos", amount: 0, amountType: "gasto" },
+  { title: "Gastos diarios", amount: 0, amountType: "gasto" },
+  { title: "Gastos boludos", amount: 0, amountType: "gasto" }
 ]
 
-export const gastosVariosReducer = (state: GastosVarios, action: Action): GastosVarios => {
+export const gastosVariosReducer = (state: Transacciones, action: Action): Transacciones => {
   const { type, payload } = action
   switch (type) {
     case 'UPDATE_GASTOS_VARIOS':
       return state.map((item) =>
-        item.title === payload.title ? { ...item, content: payload.newContent } : item
+        item.title === payload.title ? { ...item, amount: payload.newAmount } : item
       )
     default:
       return state

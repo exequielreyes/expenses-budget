@@ -7,10 +7,10 @@ export type Expense = {
   total: number;
 }
 
-export type GastoVario = {
+export type Transaccion = {
   title: string;
-  content: number;
+  amount: number;
   amountType: Money;
 }
 
-export type GastosVarios = GastoVario[]
+export type Transacciones = Transaccion[]
