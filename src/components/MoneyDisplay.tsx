@@ -17,7 +17,7 @@ interface MoneyDisplay {
 
 export const MoneyDisplay = ({ amount, amountType, setAmount, edit = false }: MoneyDisplay) => {
   const { textColor, isAmountVisible, changeVisibility } = useAmount(amountType);
-  const [inputValue, setInputValue] = useState('')
+  const [inputValue, setInputValue] = useState<string>(priceFormat(parseCurrency(amount.toString())));
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value
