@@ -1,29 +1,42 @@
 "use client"
 
-import { Expense } from '../types/types'
-import { getDate } from '@utils'
+import { useExpensesReducer, useGastosVariosReducer } from '@reducers'
+import { Expense, GastosVarios } from '../types/types'
 import { createContext, useContext, ReactNode, useState } from 'react'
 
 interface GlobalContextType {
   expenses: Expense[],
   setExpenses: (expenses: Expense[]) => void,
+  addExpense: (expense: Expense) => void,
+  removeExpense: (index: number) => void,
   cryptoKey: CryptoKey | undefined,
-  setCryptoKey: (cryptoKey: CryptoKey | undefined) => void
+  setCryptoKey: (cryptoKey: CryptoKey | undefined) => void,
+  gastosVarios: GastosVarios,
+  updateGastoBoludo: (newContent: number) => void,
+  updateGastoDiario: (newContent: number) => void,
+  updateGastoFijo: (newContent: number) => void
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined)
 
-const initialData = [
-  { date: getDate(), description: "", category: "", total: 0 },
-]
-
 export const GlobalProvider = ({ children }: { children: ReactNode }) => {
-  // const CRYPTO_KEY = "e+Av5ERmVGrWRVwknRGV+7outyvKrsZrFPInslEHviE="
+  const { expenses, setExpenses, addExpense, removeExpense } = useExpensesReducer()
+  const { gastosVarios, updateGastoBoludo, updateGastoDiario, updateGastoFijo } = useGastosVariosReducer()
   const [cryptoKey, setCryptoKey] = useState<CryptoKey>()
-  const [expenses, setExpenses] = useState<Expense[]>(initialData)
 
   return (
-    <GlobalContext.Provider value={{ expenses, setExpenses, cryptoKey, setCryptoKey }}>
+    <GlobalContext.Provider value={{
+      expenses,
+      setExpenses,
+      addExpense,
+      removeExpense,
+      cryptoKey,
+      setCryptoKey,
+      gastosVarios,
+      updateGastoBoludo,
+      updateGastoDiario,
+      updateGastoFijo
+    }}>
       {children}
     </GlobalContext.Provider>
   )

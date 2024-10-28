@@ -1,13 +1,15 @@
 'use client'
 
 import { BentoItemContainer, GastosVarios, LargeNumber, TablaGastos } from "@components";
-import { useGlobalContext } from "@context/GlobalContext";
+import { useEncrypt, useExpenses, useGastosVarios } from "@hooks";
 import { decryptData, generateKey, getCryptoKeyFromDB, getDataFromLocalStorage, saveCryptoKeyToDB } from "@utils";
 import { useEffect } from "react";
 
 export default function Home() {
 
-  const { setExpenses, setCryptoKey } = useGlobalContext()
+  const { setExpenses } = useExpenses()
+  const { updateGastoDiario, getTotalExpense } = useGastosVarios()
+  const { setCryptoKey } = useEncrypt()
 
   useEffect(() => {
 
@@ -31,7 +33,9 @@ export default function Home() {
       if(encryptedExpenses) {
         const { encryptedData, iv } = encryptedExpenses
         const decryptedExpenses = await decryptData(cryptoKey as CryptoKey, encryptedData, iv)
+        
         setExpenses(decryptedExpenses)
+        updateGastoDiario(getTotalExpense(decryptedExpenses))
       }
     }
 

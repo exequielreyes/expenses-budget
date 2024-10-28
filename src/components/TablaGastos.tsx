@@ -3,26 +3,27 @@
 import { getDate } from "@utils"
 import { BentoItemContainer } from "@components"
 import { CalendarIcon, CategoryIcon, DescriptionIcon, DolarIcon, PlusIcon, TrashIcon } from "@icons"
-import { useExpenses } from "@hooks"
+import { useExpenses, useGastosVarios } from "@hooks"
 
 export const TablaGastos = ({ className }: { className?: string }) => {
   
-  const { expenses, updateExpenses } = useExpenses()
+  const { expenses, setExpenses, addExpense, removeExpense } = useExpenses()
+  const { updateGastoDiario, getTotalExpense } = useGastosVarios()
 
   const handleEdit = (index: number, key: keyof typeof expenses[number], value: string) => {
     const newData = [...expenses]
     newData[index] = { ...newData[index], [key]: key === 'total' ? parseFloat(value) : value }
-    updateExpenses(newData)
+    setExpenses(newData)
+
+    updateGastoDiario(getTotalExpense(newData))
   }
 
   const handleAddExpense = () => {
-    updateExpenses([...expenses, { date: getDate(), description: "", category: "", total: 0 }])
+    addExpense({ date: getDate(), description: "", category: "", total: 0 })
   }
   
-  //funcionalidad DELETE
   const handleDeleteExpense = (index: number) => {
-    const newData = expenses.filter((_,i) => i !== index)
-    updateExpenses(newData)
+    removeExpense(index)
   }
 
   return (
@@ -66,7 +67,6 @@ export const TablaGastos = ({ className }: { className?: string }) => {
                   />
                 </td>
               ))}
-              {/* DELETE */}
               <td className="border-l border-custom-dark-gray text-center">
                   <button
                   onClick={() => handleDeleteExpense(index)}

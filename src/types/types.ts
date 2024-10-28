@@ -6,3 +6,11 @@ export type Expense = {
   category: string;
   total: number;
 }
+
+export type GastoVario = {
+  title: string;
+  content: number;
+  amountType: Money;
+}
+
+export type GastosVarios = GastoVario[]
