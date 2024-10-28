@@ -3,7 +3,7 @@
 import { BentoItemContainer, GastosVarios, LargeNumber, TablaGastos } from "@components";
 import { useEncrypt, useExpenses, useGastosVarios } from "@hooks";
 import { decryptData, generateKey, getCryptoKeyFromDB, getDataFromLocalStorage, saveCryptoKeyToDB } from "@utils";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
 
@@ -42,6 +42,8 @@ export default function Home() {
     getExpenses()
   }, [])
 
+  const [sueldo, setSueldo] = useState<number>(533123.32)
+
   return (
     <main className="m-auto max-w-[1670px] h-[calc(100vh-100px)]">
       <div className="grid grid-cols-19 grid-rows-12 gap-6 p-4 w-full h-full">
@@ -49,8 +51,10 @@ export default function Home() {
         <LargeNumber
           className="col-start-9 col-span-4 row-span-2 row-start-1"
           title="Sueldo"
-          content="533.431,12"
+          amount={sueldo}
+          setAmount={setSueldo}
           amountType="ingreso"
+          edit
         />
 
         <GastosVarios className="col-start-13 col-span-3 row-span-5 row-start-1" />
@@ -62,7 +66,7 @@ export default function Home() {
         <LargeNumber
           className="col-start-9 row-start-3 col-span-4 row-span-2"
           title="Gasto total"
-          content="3,00"
+          amount={3}
           amountType="gasto"
         />
 

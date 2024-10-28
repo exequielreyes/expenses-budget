@@ -7,21 +7,23 @@ import { MoneyDisplay, BentoItemContainer } from "@components";
 type LargeNumber = {
   className?: string;
   title: string;
-  content: string;
+  amount: number;
   amountType: Money;
+  setAmount?: (amount: number) => void;
+  edit?: boolean;
 };
 
-export const LargeNumber = ({ className, title, content, amountType }: Readonly<LargeNumber>) => {
+export const LargeNumber = ({ className, title, amount, setAmount, amountType, edit = false }: Readonly<LargeNumber>) => {
 
   return (
     <BentoItemContainer className={className}>
-      <div className="flex flex-col gap-4 h-full [&>div]:flex [&>div]:justify-between [&>div]:items-center">
+      <div className={`flex flex-col h-full [&>div]:flex [&>div]:justify-between [&>div]:items-center ${ edit ? 'gap-3' : 'gap-2'}`}>
         <div>
           <h2 className="text-3xl font-medium">{title}</h2>
-          <EditIcon className="size-6 stroke-custom-gray" />
+          { edit && <EditIcon className="size-6 stroke-custom-gray" /> }
         </div>
         <div>
-          <MoneyDisplay amount={content} amountType={amountType} />
+          <MoneyDisplay amount={amount} setAmount={setAmount} amountType={amountType} edit={edit} />
         </div>
       </div>
     </BentoItemContainer >
