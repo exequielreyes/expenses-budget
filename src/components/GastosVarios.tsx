@@ -3,7 +3,7 @@
 import { useAmount, useGastosVarios } from "@hooks";
 import { BentoItemContainer } from "@components";
 import { GastoVario, Money } from "../types/types";
-import { priceFormat } from "@utils";
+import NumberFlow from "@number-flow/react";
 
 // TODO: Refactorizar esto
 
@@ -11,9 +11,13 @@ const GastoVarioItem = ({ gasto, className }: { gasto: GastoVario, className?: s
   const { textColor } = useAmount(gasto.amountType as Money)
 
   return (
-    <div className={`flex flex-col gap-3 ${className}`}>
+    <div className={`flex flex-col gap-2 ${className}`}>
       <h2 className="font-medium text-xl text-custom-light-gray">{gasto.title}</h2>
-      <p className={`text-3xl font-semibold ${textColor}`}>{priceFormat(gasto.content)}</p>
+      <NumberFlow
+        value={gasto.content}
+        format={{ style: 'currency', currency: 'ARS'}}
+        className={`text-3xl font-semibold ${textColor}`}
+      />
     </div>
   )
 }
