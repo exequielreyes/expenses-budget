@@ -12,7 +12,15 @@ export const TablaGastos = ({ className }: { className?: string }) => {
 
   const handleEdit = (index: number, key: keyof typeof expenses[number], value: string) => {
     const newData = [...expenses]
-    newData[index] = { ...newData[index], [key]: key === 'total' ? parseFloat(value) : value }
+
+    const parseFloatValue = (value: string) => {
+      const parsedValue = parseFloat(value)
+      return isNaN(parsedValue) ? 0 : parsedValue
+    }
+
+    const newValue = key === 'total' ? parseFloatValue(value) : value
+
+    newData[index] = { ...newData[index], [key]: newValue }
     setExpenses(newData)
 
     updateGastoDiario(getTotalExpense(newData))
@@ -61,7 +69,7 @@ export const TablaGastos = ({ className }: { className?: string }) => {
                 <td key={key} className={`${i === 0 ? '' : 'border-l'} border-custom-dark-gray text-custom-light-gray text-base`}>
                   <input
                     type={key === "total" ? "number" : "text"}
-                    value={value}
+                    value={value === 0 ? '' : value}
                     onChange={(e) => handleEdit(index, key as keyof typeof item, e.target.value)}
                     className="w-full bg-transparent border-none p-4 focus:outline-none focus:bg-custom-dark-gray"
                   />
