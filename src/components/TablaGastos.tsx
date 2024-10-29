@@ -1,14 +1,60 @@
 'use client'
 
-import { getDate } from "@utils"
+import { getDate, parseCurrency, priceFormat } from "@utils"
 import { BentoItemContainer } from "@components"
 import { CalendarIcon, CategoryIcon, DescriptionIcon, DolarIcon, PlusIcon, TrashIcon } from "@icons"
-import { useExpenses, useGastosVarios } from "@hooks"
+import { useExpenses } from "@hooks"
+import { Expense } from "../types/types"
+import { ChangeEvent, useState } from "react"
+
+
+type InputItemProps = {
+  index: number,
+  fieldKey: keyof Expense,
+  value: string | number,
+  handleEdit: (index: number, key: keyof Expense, value: string) => void
+}
+
+const InputItem = ({ index, fieldKey, value, handleEdit }: InputItemProps) => {
+  const [inputValue, setInputValue] = useState<string>(
+    fieldKey === "total" ? priceFormat(parseCurrency(value.toString())) : value.toString()
+  );
+  
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value
+    setInputValue(rawValue)
+    handleEdit(index, fieldKey as keyof Expense, rawValue)
+  }
+
+  const handleBlur = () => {
+    if(fieldKey === "total") {
+      const parsedValue = parseCurrency(inputValue)
+      handleEdit(index, fieldKey as keyof Expense, parsedValue.toString())
+      setInputValue(priceFormat(parsedValue))
+    }
+  }
+
+  const handleFocus = () => {
+    if(fieldKey === "total") {
+      setInputValue(value.toString().replace('.', ','))
+    }
+  }
+
+  return (
+    <input
+      type="text"
+      value={inputValue}
+      onChange={(e) => handleChange(e)}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      className="w-full bg-transparent border-none p-4 focus:outline-none focus:bg-custom-dark-gray"
+    />
+  )
+}
 
 export const TablaGastos = ({ className }: { className?: string }) => {
-  
+
   const { expenses, setExpenses, addExpense, removeExpense } = useExpenses()
-  const { updateGastoDiario, getTotalExpense } = useGastosVarios()
 
   const handleEdit = (index: number, key: keyof typeof expenses[number], value: string) => {
     const newData = [...expenses]
@@ -22,14 +68,12 @@ export const TablaGastos = ({ className }: { className?: string }) => {
 
     newData[index] = { ...newData[index], [key]: newValue }
     setExpenses(newData)
-
-    updateGastoDiario(getTotalExpense(newData))
   }
 
   const handleAddExpense = () => {
     addExpense({ date: getDate(), description: "", category: "", total: 0 })
   }
-  
+
   const handleDeleteExpense = (index: number) => {
     removeExpense(index)
   }
@@ -65,23 +109,19 @@ export const TablaGastos = ({ className }: { className?: string }) => {
         <tbody>
           {expenses.map((item, index) => (
             <tr key={`${item.date}-${index}`} className={`group ${index === expenses.length - 1 ? '' : 'border-b'} border-custom-dark-gray`}>
-              {Object.entries(item).map(([key, value], i) => (
+              {Object.entries(item).map(([key, value], i) =>
+              (
                 <td key={key} className={`${i === 0 ? '' : 'border-l'} border-custom-dark-gray text-custom-light-gray text-base`}>
-                  <input
-                    type={key === "total" ? "number" : "text"}
-                    value={value === 0 ? '' : value}
-                    onChange={(e) => handleEdit(index, key as keyof typeof item, e.target.value)}
-                    className="w-full bg-transparent border-none p-4 focus:outline-none focus:bg-custom-dark-gray"
-                  />
+                  <InputItem index={index} fieldKey={key as keyof Expense} value={value} handleEdit={handleEdit} />
                 </td>
               ))}
               <td className="border-l border-custom-dark-gray text-center">
-                  <button
+                <button
                   onClick={() => handleDeleteExpense(index)}
                   className="hidden group-hover:inline-block text-custom-light-gray p-2"
-                  >
-                    <TrashIcon />
-                  </button>
+                >
+                  <TrashIcon />
+                </button>
               </td>
             </tr>
           ))}
