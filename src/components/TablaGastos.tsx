@@ -1,7 +1,7 @@
 'use client'
 
 import { getDate, parseCurrency, priceFormat } from "@utils"
-import { BentoItemContainer } from "@components"
+import { BentoItemContainer, IconButton } from "@components"
 import { CalendarIcon, CategoryIcon, DescriptionIcon, DolarIcon, PlusIcon, TrashIcon } from "@icons"
 import { useExpenses } from "@hooks"
 import { Expense } from "../types/types"
@@ -19,7 +19,7 @@ const InputItem = ({ index, fieldKey, value, handleEdit }: InputItemProps) => {
   const [inputValue, setInputValue] = useState<string>(
     fieldKey === "total" ? priceFormat(parseCurrency(value.toString())) : value.toString()
   );
-  
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value
     setInputValue(rawValue)
@@ -27,7 +27,7 @@ const InputItem = ({ index, fieldKey, value, handleEdit }: InputItemProps) => {
   }
 
   const handleBlur = () => {
-    if(fieldKey === "total") {
+    if (fieldKey === "total") {
       const parsedValue = parseCurrency(inputValue)
       handleEdit(index, fieldKey as keyof Expense, parsedValue.toString())
       setInputValue(priceFormat(parsedValue))
@@ -35,7 +35,7 @@ const InputItem = ({ index, fieldKey, value, handleEdit }: InputItemProps) => {
   }
 
   const handleFocus = () => {
-    if(fieldKey === "total") {
+    if (fieldKey === "total") {
       setInputValue(value.toString().replace('.', ','))
     }
   }
@@ -103,7 +103,7 @@ export const TablaGastos = ({ className }: { className?: string }) => {
                 <DolarIcon /> Total
               </div>
             </th>
-            <th className="w-12"></th>
+            <th className="w-12 !border-l-0"></th>
           </tr>
         </thead>
         <tbody>
@@ -115,13 +115,12 @@ export const TablaGastos = ({ className }: { className?: string }) => {
                   <InputItem index={index} fieldKey={key as keyof Expense} value={value} handleEdit={handleEdit} />
                 </td>
               ))}
-              <td className="border-l border-custom-dark-gray text-center">
-                <button
-                  onClick={() => handleDeleteExpense(index)}
-                  className="hidden group-hover:inline-block text-custom-light-gray p-2"
-                >
-                  <TrashIcon />
-                </button>
+              <td className="border-custom-dark-gray text-center">
+                <IconButton 
+                className="inline-block text-transparent group-hover:text-custom-light-gray transition-all ease-out duration-700 group-hover:duration-200"
+                onClick={() => handleDeleteExpense(index)}>
+                  <TrashIcon className="size-6" />
+                </IconButton>
               </td>
             </tr>
           ))}

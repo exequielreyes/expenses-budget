@@ -1,6 +1,6 @@
-export const IconButton = ({ children, onClick }: { children: React.ReactNode, onClick: () => void }) => {
+export const IconButton = ({ children, onClick, className }: { children: React.ReactNode, onClick: () => void, className?: string } ) => {
   return (
-    <button className="" onClick={onClick}>
+    <button className={className} onClick={onClick}>
       {children}
     </button>
   );
