@@ -5,20 +5,36 @@ import { BentoItemContainer, IconButton } from "@components"
 import { CalendarIcon, CategoryIcon, DescriptionIcon, DolarIcon, PlusIcon, TrashIcon } from "@icons"
 import { useExpenses } from "@hooks"
 import { Expense } from "../types/types"
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 
+// TODO: Refactorizar esto
 
 type InputItemProps = {
   index: number,
   fieldKey: keyof Expense,
   value: string | number,
   handleEdit: (index: number, key: keyof Expense, value: string) => void
+  isDelete: boolean,
+  setIsDelete: (isDelete: boolean) => void
 }
 
-const InputItem = ({ index, fieldKey, value, handleEdit }: InputItemProps) => {
+const InputItem = ({ index, fieldKey, value, handleEdit, isDelete, setIsDelete }: Readonly<InputItemProps>) => {
   const [inputValue, setInputValue] = useState<string>(
     fieldKey === "total" ? priceFormat(parseCurrency(value.toString())) : value.toString()
   );
+
+  useEffect(() => {
+    const formattedValue =
+      fieldKey === "total"
+        ? priceFormat(parseCurrency(value.toString()))
+        : value.toString()
+
+    if (formattedValue !== inputValue) {
+      setInputValue(formattedValue)
+    }
+    setIsDelete(false)
+
+  }, [isDelete])
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value
@@ -56,6 +72,7 @@ const InputItem = ({ index, fieldKey, value, handleEdit }: InputItemProps) => {
 export const TablaGastos = ({ className }: { className?: string }) => {
 
   const { expenses, setExpenses, addExpense, removeExpense } = useExpenses()
+  const [isDelete, setIsDelete] = useState<boolean>(false)
 
   const handleEdit = (index: number, key: keyof typeof expenses[number], value: string) => {
     const newData = [...expenses]
@@ -77,6 +94,7 @@ export const TablaGastos = ({ className }: { className?: string }) => {
 
   const handleDeleteExpense = (index: number) => {
     removeExpense(index)
+    setIsDelete(true)
   }
 
   return (
@@ -113,7 +131,7 @@ export const TablaGastos = ({ className }: { className?: string }) => {
               {Object.entries(item).map(([key, value], i) =>
               (
                 <td key={key} className={`${i === 0 ? '' : 'border-l'} border-custom-dark-gray text-custom-light-gray text-base`}>
-                  <InputItem index={index} fieldKey={key as keyof Expense} value={value} handleEdit={handleEdit} />
+                  <InputItem index={index} fieldKey={key as keyof Expense} value={value} handleEdit={handleEdit} isDelete={isDelete} setIsDelete={setIsDelete} />
                 </td>
               ))}
               <td className="border-custom-dark-gray text-center">
