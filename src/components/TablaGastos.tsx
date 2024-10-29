@@ -36,7 +36,8 @@ const InputItem = ({ index, fieldKey, value, handleEdit }: InputItemProps) => {
 
   const handleFocus = () => {
     if (fieldKey === "total") {
-      setInputValue(value.toString().replace('.', ','))
+      const stringValue = value.toString().replace('.', ',')
+      setInputValue(stringValue === "0" ? "" : stringValue)
     }
   }
 
