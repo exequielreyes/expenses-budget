@@ -29,5 +29,7 @@ body {
 @layer base {
   :root {
     --radius: 0.5rem;
+    --chart-2: 160 60% 45%;
+    --custom-green: #089981;
   }
 }

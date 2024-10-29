@@ -12,9 +12,9 @@ const config: Config = {
   		colors: {
   			background: 'var(--background)',
   			foreground: 'var(--foreground)',
-  			'custom-black': '#27272A',
+  			'custom-black': '#1E1E1E',
   			'custom-gray': '#717171',
-  			'custom-green': '#089981',
+  			'custom-green': 'var(--custom-green)',
   			'custom-red': '#F23645',
   			'custom-yellow': '#F6A000',
   			'custom-light-gray': '#ADADAD',

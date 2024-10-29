@@ -1,6 +1,6 @@
 'use client'
 
-import { BentoItemContainer, GastosVarios, LargeNumber, TablaGastos } from "@components";
+import { BentoItemContainer, GastosVarios, LargeNumber, Restante, TablaGastos } from "@components";
 import { useEncrypt, useExpenses, useGastosVarios } from "@hooks";
 import { useGastoTotal } from "@hooks/useGastoTotal";
 import { useIngresos } from "@hooks/useIngresos";
@@ -78,8 +78,8 @@ export default function Home() {
           amountType="gasto"
         />
 
-        <BentoItemContainer className="col-start-9 row-start-6 col-span-5 row-span-5">
-          <h1>Cuanto me queda</h1>
+        <BentoItemContainer className="col-start-9 row-start-6 col-span-5 row-span-7">
+          <Restante />
         </BentoItemContainer>
         <BentoItemContainer className="col-start-14 row-start-6 col-span-6 row-span-7">
           <h1>Gastos fijos</h1>
