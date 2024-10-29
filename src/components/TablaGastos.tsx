@@ -64,7 +64,7 @@ const InputItem = ({ index, fieldKey, value, handleEdit, isDelete, setIsDelete }
       onChange={(e) => handleChange(e)}
       onFocus={handleFocus}
       onBlur={handleBlur}
-      className="w-full bg-transparent border-none p-4 focus:outline-none focus:bg-custom-dark-gray"
+      className="w-full bg-transparent border-none p-3 focus:outline-none focus:bg-custom-dark-gray"
     />
   )
 }
@@ -101,25 +101,25 @@ export const TablaGastos = ({ className }: { className?: string }) => {
     <BentoItemContainer className={className}>
       <table className="w-full text-left border-collapse">
         <thead>
-          <tr className="[&>th]:border-l first:[&>th]:border-l-0 [&>th]:border-b [&>th]:p-4 [&>th]:border-custom-dark-gray text-xl [&>th]:font-normal [&>th]:w-[calc(100%/4)] [&>th>div]:flex [&>th>div]:items-center [&>th>div]:gap-2">
+          <tr className="[&>th]:border-b [&>th]:p-4 [&>th]:border-custom-dark-gray text-lg [&>th]:font-normal [&>th]:w-[calc(100%/4)] [&>th>div]:flex [&>th>div]:items-center [&>th>div]:gap-2">
             <th>
               <div>
-                <CalendarIcon /> Fecha
+                <CalendarIcon className="size-5" /> Fecha
               </div>
             </th>
             <th>
               <div>
-                <DescriptionIcon /> Descripción
+                <DescriptionIcon className="size-5" /> Descripción
               </div>
             </th>
             <th>
               <div>
-                <CategoryIcon /> Categoría
+                <CategoryIcon className="size-5" /> Categoría
               </div>
             </th>
             <th>
               <div>
-                <DolarIcon /> Total
+                <DolarIcon className="size-5" /> Total
               </div>
             </th>
             <th className="w-12 !border-l-0"></th>
@@ -128,9 +128,9 @@ export const TablaGastos = ({ className }: { className?: string }) => {
         <tbody>
           {expenses.map((item, index) => (
             <tr key={`${item.date}-${index}`} className={`group ${index === expenses.length - 1 ? '' : 'border-b'} border-custom-dark-gray`}>
-              {Object.entries(item).map(([key, value], i) =>
+              {Object.entries(item).map(([key, value]) =>
               (
-                <td key={key} className={`${i === 0 ? '' : 'border-l'} border-custom-dark-gray text-custom-light-gray text-base`}>
+                <td key={key} className={`border-custom-dark-gray text-custom-light-gray text-base`}>
                   <InputItem index={index} fieldKey={key as keyof Expense} value={value} handleEdit={handleEdit} isDelete={isDelete} setIsDelete={setIsDelete} />
                 </td>
               ))}
