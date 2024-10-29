@@ -16,7 +16,9 @@ interface GlobalContextType {
   updateGastoDiario: (newContent: number) => void,
   updateGastoFijo: (newContent: number) => void,
   ingresos: Transacciones,
-  updateSueldo:  (newAmount: number) => void
+  updateSueldo:  (newAmount: number) => void,
+  gastoTotal: number,
+  setGastoTotal: (newAmount: number) => void,
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined)
@@ -26,6 +28,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const { gastosVarios, updateGastoBoludo, updateGastoDiario, updateGastoFijo } = useGastosVariosReducer()
   const { ingresos, updateSueldo } = useIngresosReducer()
   const [cryptoKey, setCryptoKey] = useState<CryptoKey>()
+  const [gastoTotal, setGastoTotal] = useState<number>(0)
 
   return (
     <GlobalContext.Provider value={{
@@ -40,7 +43,9 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
       updateGastoDiario,
       updateGastoFijo,
       ingresos,
-      updateSueldo
+      updateSueldo,
+      gastoTotal,
+      setGastoTotal,
     }}>
       {children}
     </GlobalContext.Provider>

@@ -5,7 +5,7 @@ type Action = { type: 'UPDATE_GASTOS_VARIOS'; payload: { title: string; newAmoun
 export const initialGastos: Transacciones = [
   { title: "Gastos fijos", amount: 0, amountType: "gasto" },
   { title: "Gastos diarios", amount: 0, amountType: "gasto" },
-  { title: "Gastos boludos", amount: 0, amountType: "gasto" }
+  { title: "Gastos boludos", amount: 1.12, amountType: "gasto" }
 ]
 
 export const gastosVariosReducer = (state: Transacciones, action: Action): Transacciones => {

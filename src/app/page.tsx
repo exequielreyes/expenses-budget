@@ -2,6 +2,7 @@
 
 import { BentoItemContainer, GastosVarios, LargeNumber, TablaGastos } from "@components";
 import { useEncrypt, useExpenses, useGastosVarios } from "@hooks";
+import { useGastoTotal } from "@hooks/useGastoTotal";
 import { useIngresos } from "@hooks/useIngresos";
 import { decryptData, generateKey, getCryptoKeyFromDB, getDataFromLocalStorage, saveCryptoKeyToDB } from "@utils";
 import { useEffect } from "react";
@@ -11,6 +12,7 @@ export default function Home() {
   const { setExpenses } = useExpenses()
   const { updateGastoDiario, getTotalExpense } = useGastosVarios()
   const { sueldo, updateSueldo } = useIngresos()
+  const { gastoTotal } = useGastoTotal()
   const { setCryptoKey } = useEncrypt()
 
   useEffect(() => {
@@ -72,7 +74,7 @@ export default function Home() {
         <LargeNumber
           className="col-start-9 row-start-3 col-span-4 row-span-2"
           title="Gasto total"
-          amount={3}
+          amount={gastoTotal}
           amountType="gasto"
         />
 
