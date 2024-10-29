@@ -16,7 +16,7 @@ export const LargeNumber = ({ className, title, amount, setAmount, amountType, e
 
   return (
     <BentoItemContainer className={className}>
-      <div className={`flex flex-col h-full [&>div]:flex [&>div]:justify-between [&>div]:items-center ${ edit ? 'gap-3' : 'gap-2'}`}>
+      <div className={`flex flex-col h-full w-full [&>div]:flex [&>div]:justify-between [&>div]:items-center gap-2`}>
         <div>
           <h2 className="text-3xl font-medium">{title}</h2>
         </div>
