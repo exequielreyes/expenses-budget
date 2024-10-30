@@ -1,20 +1,26 @@
 'use client'
 
 import { DescriptionIcon, DolarIcon, PlusIcon, TrashIcon } from "@icons"
-import { BentoItemContainer } from "./BentoItemContainer"
-import { IconButton } from "./IconButton"
-import { InputItemTable } from "./InputItemTable"
+import { IconButton, InputItemTable, BentoItemContainer } from "@components"
 import { useState } from "react"
 import { OtherExpense } from "../types/types"
-import { useMiscellaneousExpenses } from "@hooks"
 
-export const Table = ({ className }: { className?: string }) => {
+type TableProps = {
+  className?: string
+  name: string
+  otherExpenses: OtherExpense[]
+  setOtherExpenses: (otherExpenses: OtherExpense[]) => void
+  addOtherExpense: (otherExpense: OtherExpense) => void
+  removeOtherExpense: (index: number) => void
+}
 
-  const {miscellaneousExpenses, setMiscellaneousExpenses, addMiscellaneousExpense, removeMiscellaneousExpense} = useMiscellaneousExpenses()
+export const Table = ({ name, className, otherExpenses, setOtherExpenses, addOtherExpense, removeOtherExpense }: Readonly<TableProps>) => {
+
+  
   const [isDelete, setIsDelete] = useState<boolean>(false)
 
-  const handleEdit = (index: number, key: keyof typeof miscellaneousExpenses[number], value: string) => {
-    const newData = [...miscellaneousExpenses]
+  const handleEdit = (index: number, key: keyof typeof otherExpenses[number], value: string) => {
+    const newData = [...otherExpenses]
 
     const parseFloatValue = (value: string) => {
       const parsedValue = parseFloat(value)
@@ -24,21 +30,21 @@ export const Table = ({ className }: { className?: string }) => {
     const newValue = key === 'amount' ? parseFloatValue(value) : value
 
     newData[index] = { ...newData[index], [key]: newValue }
-    setMiscellaneousExpenses(newData)
+    setOtherExpenses(newData)
   }
 
   const handleAddExpense = () => {
-    addMiscellaneousExpense({ description: "", amount: 0 })
+    addOtherExpense({ description: "", amount: 0 })
   }
 
   const handleDeleteExpense = (index: number) => {
-    removeMiscellaneousExpense(index)
+    removeOtherExpense(index)
     setIsDelete(true)
   }
 
   return (
     <BentoItemContainer className={className}>
-      <h2 className="text-center text-xl font-medium py-4">Gastos fijos</h2>
+      <h2 className="text-center text-xl font-medium py-4">{name}</h2>
       <table className="w-full text-left border-collapse">
         <thead>
           <tr className="[&>th]:border-y [&>th]:p-4 [&>th]:border-custom-dark-gray text-lg [&>th]:font-normal [&>th]:w-[calc(100%/2)] [&>th>div]:flex [&>th>div]:items-center [&>th>div]:gap-2">
@@ -56,8 +62,8 @@ export const Table = ({ className }: { className?: string }) => {
           </tr>
         </thead>
         <tbody>
-          {miscellaneousExpenses.map((item, index) => (
-            <tr key={index} className={`group ${index === miscellaneousExpenses.length - 1 ? '' : 'border-b'} border-custom-dark-gray`}>
+          {otherExpenses.map((item, index) => (
+            <tr key={index} className={`group ${index === otherExpenses.length - 1 ? '' : 'border-b'} border-custom-dark-gray`}>
               {Object.entries(item).map(([key, value], colIndex) =>
               (
                 <td key={`${index}-${colIndex}`} className={`border-custom-dark-gray text-custom-light-gray text-base`}>

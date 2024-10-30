@@ -1,16 +1,15 @@
 'use client'
 
 import { BentoItemContainer, GastosVarios, LargeNumber, Restante, TablaGastos, Table } from "@components";
-import { useEncrypt, useExpenses, useGastosVarios, useMiscellaneousExpenses } from "@hooks";
-import { useGastoTotal } from "@hooks/useGastoTotal";
-import { useIngresos } from "@hooks/useIngresos";
+import { useEncrypt, useExpenses, useGastosVarios, useGastoTotal, useIngresos, useMiscellaneousExpenses, useStupidExpenses } from "@hooks";
 import { decryptData, generateKey, getCryptoKeyFromDB, getDataFromLocalStorage, saveCryptoKeyToDB } from "@utils";
 import { useEffect } from "react";
 
 export default function Home() {
 
   const { setExpenses } = useExpenses()
-  const { setMiscellaneousExpenses } = useMiscellaneousExpenses()
+  const { miscellaneousExpenses, setMiscellaneousExpenses, addMiscellaneousExpense, removeMiscellaneousExpense } = useMiscellaneousExpenses()
+  const { stupidExpenses, setStupidExpenses, addStupidExpense, removeStupidExpense } = useStupidExpenses()
   const { updateGastoDiario, getTotalExpense } = useGastosVarios()
   const { sueldo, updateSueldo } = useIngresos()
   const { gastoTotal } = useGastoTotal()
@@ -20,13 +19,13 @@ export default function Home() {
 
     const initializeCryptoKey = async () => {
       let cryptoKey = await getCryptoKeyFromDB()
-    
+
       if (!cryptoKey) {
         cryptoKey = await generateKey()
         await saveCryptoKeyToDB(cryptoKey)
       } else {
       }
-    
+
       return cryptoKey as CryptoKey
     }
 
@@ -36,21 +35,28 @@ export default function Home() {
       const encryptedExpenses = await getDataFromLocalStorage<{ encryptedData: string, iv: string }>('expenses')
       const encrtptedIngresos = await getDataFromLocalStorage<{ encryptedData: string, iv: string }>('ingresos')
       const encryptedMiscellaneousExpenses = await getDataFromLocalStorage<{ encryptedData: string, iv: string }>('miscellaneousExpenses')
-     
-      if(encryptedExpenses) {
+      const encryptedStupidExpenses = await getDataFromLocalStorage<{ encryptedData: string, iv: string }>('stupidExpenses')
+
+      if (encryptedExpenses) {
         const { encryptedData, iv } = encryptedExpenses
         const decryptedExpenses = await decryptData(cryptoKey as CryptoKey, encryptedData, iv)
         setExpenses(decryptedExpenses)
         updateGastoDiario(getTotalExpense(decryptedExpenses))
       }
 
-      if(encryptedMiscellaneousExpenses) {
+      if (encryptedMiscellaneousExpenses) {
         const { encryptedData, iv } = encryptedMiscellaneousExpenses
         const decryptedMiscellaneousExpenses = await decryptData(cryptoKey as CryptoKey, encryptedData, iv)
         setMiscellaneousExpenses(decryptedMiscellaneousExpenses)
       }
 
-      if(encrtptedIngresos) {
+      if (encryptedStupidExpenses) {
+        const { encryptedData, iv } = encryptedStupidExpenses
+        const decryptedStupidExpenses = await decryptData(cryptoKey as CryptoKey, encryptedData, iv)
+        setStupidExpenses(decryptedStupidExpenses)
+      }
+
+      if (encrtptedIngresos) {
         const { encryptedData, iv } = encrtptedIngresos
         const decryptedIngresos = await decryptData(cryptoKey as CryptoKey, encryptedData, iv)
         updateSueldo(decryptedIngresos[0].amount)
@@ -75,9 +81,15 @@ export default function Home() {
 
         <GastosVarios className="col-start-13 col-span-3 row-span-5 row-start-1" />
 
-        <BentoItemContainer className="col-start-16 col-span-4 row-span-5 row-start-1">
-          <h1>Gastos boludos</h1>
-        </BentoItemContainer>
+        <Table
+          className="table col-start-16 col-span-4 row-span-5 row-start-1"
+          name="Gastos boludos"
+          otherExpenses={stupidExpenses}
+          setOtherExpenses={setStupidExpenses}
+          addOtherExpense={addStupidExpense}
+          removeOtherExpense={removeStupidExpense}
+        />
+
 
         <LargeNumber
           className="col-start-9 row-start-3 col-span-4 row-span-2"
@@ -89,7 +101,14 @@ export default function Home() {
         <BentoItemContainer className="col-start-9 row-start-6 col-span-5 row-span-7">
           <Restante />
         </BentoItemContainer>
-        <Table className="table col-start-14 row-start-6 col-span-6 row-span-7" />
+        <Table
+          className="table col-start-14 row-start-6 col-span-6 row-span-7"
+          name="Gastos fijos"
+          otherExpenses={miscellaneousExpenses}
+          setOtherExpenses={setMiscellaneousExpenses}
+          addOtherExpense={addMiscellaneousExpense}
+          removeOtherExpense={removeMiscellaneousExpense}
+        />
       </div>
 
     </main>
