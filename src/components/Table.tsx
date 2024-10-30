@@ -1,0 +1,86 @@
+'use client'
+
+import { DescriptionIcon, DolarIcon, PlusIcon, TrashIcon } from "@icons"
+import { BentoItemContainer } from "./BentoItemContainer"
+import { IconButton } from "./IconButton"
+import { InputItemTable } from "./InputItemTable"
+import { useState } from "react"
+import { OtherExpense } from "../types/types"
+import { useMiscellaneousExpenses } from "@hooks"
+
+export const Table = ({ className }: { className?: string }) => {
+
+  const {miscellaneousExpenses, setMiscellaneousExpenses, addMiscellaneousExpense, removeMiscellaneousExpense} = useMiscellaneousExpenses()
+  const [isDelete, setIsDelete] = useState<boolean>(false)
+
+  const handleEdit = (index: number, key: keyof typeof miscellaneousExpenses[number], value: string) => {
+    const newData = [...miscellaneousExpenses]
+
+    const parseFloatValue = (value: string) => {
+      const parsedValue = parseFloat(value)
+      return isNaN(parsedValue) ? 0 : parsedValue
+    }
+
+    const newValue = key === 'amount' ? parseFloatValue(value) : value
+
+    newData[index] = { ...newData[index], [key]: newValue }
+    setMiscellaneousExpenses(newData)
+  }
+
+  const handleAddExpense = () => {
+    addMiscellaneousExpense({ description: "", amount: 0 })
+  }
+
+  const handleDeleteExpense = (index: number) => {
+    removeMiscellaneousExpense(index)
+    setIsDelete(true)
+  }
+
+  return (
+    <BentoItemContainer className={className}>
+      <h2 className="text-center text-xl font-medium py-4">Gastos fijos</h2>
+      <table className="w-full text-left border-collapse">
+        <thead>
+          <tr className="[&>th]:border-y [&>th]:p-4 [&>th]:border-custom-dark-gray text-lg [&>th]:font-normal [&>th]:w-[calc(100%/2)] [&>th>div]:flex [&>th>div]:items-center [&>th>div]:gap-2">
+            <th>
+              <div>
+                <DescriptionIcon className="size-5" /> Descripción
+              </div>
+            </th>
+            <th>
+              <div>
+                <DolarIcon className="size-5" /> Total
+              </div>
+            </th>
+            <th className="!border-l-0"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {miscellaneousExpenses.map((item, index) => (
+            <tr key={index} className={`group ${index === miscellaneousExpenses.length - 1 ? '' : 'border-b'} border-custom-dark-gray`}>
+              {Object.entries(item).map(([key, value], colIndex) =>
+              (
+                <td key={`${index}-${colIndex}`} className={`border-custom-dark-gray text-custom-light-gray text-base`}>
+                  <InputItemTable index={index} fieldKey={key as keyof OtherExpense} value={value} handleEdit={handleEdit} isDelete={isDelete} setIsDelete={setIsDelete} />
+                </td>
+              ))}
+              <td className="border-custom-dark-gray text-center">
+                <IconButton
+                  className="inline-block text-transparent group-hover:text-custom-light-gray transition-all ease-out duration-700 group-hover:duration-200"
+                  onClick={() => handleDeleteExpense(index)}>
+                  <TrashIcon className="size-6" />
+                </IconButton>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <button
+        className="w-full p-1 hover:p-4 transition-all flex items-center justify-center gap-1 rounded-b-2xl border border-custom-dark-gray"
+        onClick={handleAddExpense}
+      >
+        <PlusIcon />
+      </button>
+    </BentoItemContainer>
+  )
+}

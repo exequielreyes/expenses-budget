@@ -7,6 +7,11 @@ export type Expense = {
   amount: number;
 }
 
+export type OtherExpense = {
+  description: string;
+  amount: number;
+}
+
 export type Transaction = {
   title: string;
   amount: number;

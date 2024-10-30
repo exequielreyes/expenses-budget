@@ -1,21 +1,21 @@
 'use client';
 
 import { ChangeEvent, useEffect, useState } from "react";
-import { Expense } from "../types/types";
+import { Expense, OtherExpense } from "../types/types";
 import { parseCurrency, priceFormat } from "@utils";
 
-type InputItemProps = {
+type InputItemProps<T> = {
   index: number,
-  fieldKey: keyof Expense,
+  fieldKey: keyof T,
   value: string | number,
-  handleEdit: (index: number, key: keyof Expense, value: string) => void
+  handleEdit: (index: number, key: keyof T, value: string) => void
   isDelete: boolean,
   setIsDelete: (isDelete: boolean) => void
 }
 
 // TODO: Refactorizar esto
 
-export const InputItemTable = ({ index, fieldKey, value, handleEdit, isDelete, setIsDelete }: Readonly<InputItemProps>) => {
+export const InputItemTable = <T extends Expense | OtherExpense>({ index, fieldKey, value, handleEdit, isDelete, setIsDelete }: Readonly<InputItemProps<T>>) => {
   const [inputValue, setInputValue] = useState<string>(
     fieldKey === "amount" ? priceFormat(parseCurrency(value.toString())) : value.toString()
   );
@@ -36,22 +36,20 @@ export const InputItemTable = ({ index, fieldKey, value, handleEdit, isDelete, s
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value
     setInputValue(rawValue)
-    handleEdit(index, fieldKey as keyof Expense, rawValue)
+    handleEdit(index, fieldKey as keyof T, rawValue)
   }
 
   const handleBlur = () => {
-    if (fieldKey === "amount") {
-      const parsedValue = parseCurrency(inputValue)
-      handleEdit(index, fieldKey as keyof Expense, parsedValue.toString())
-      setInputValue(priceFormat(parsedValue))
-    }
+    const parsedValue = parseCurrency(inputValue)
+    handleEdit(index, fieldKey as keyof T, parsedValue.toString())
+    setInputValue(priceFormat(parsedValue))
+
   }
 
   const handleFocus = () => {
-    if (fieldKey === "amount") {
-      const stringValue = value.toString().replace('.', ',')
-      setInputValue(stringValue === "0" ? "" : stringValue)
-    }
+    const stringValue = value.toString().replace('.', ',')
+    setInputValue(stringValue === "0" ? "" : stringValue)
+
   }
 
   return (
@@ -59,8 +57,8 @@ export const InputItemTable = ({ index, fieldKey, value, handleEdit, isDelete, s
       type="text"
       value={inputValue}
       onChange={(e) => handleChange(e)}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
+      onFocus={fieldKey === "amount" ? handleFocus : undefined}
+      onBlur={fieldKey === "amount" ? handleBlur : undefined}
       className="w-full bg-transparent border-none p-3 focus:outline-none focus:bg-custom-dark-gray"
     />
   )

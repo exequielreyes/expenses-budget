@@ -1,23 +1,29 @@
 import { useGlobalContext } from "@context/GlobalContext"
-import { Expense } from '../types/types'
+import { Expense, OtherExpense } from '../types/types'
 import { useCallback, useEffect } from "react"
 import { useExpenses } from "./useExpenses"
+import { useMiscellaneousExpenses } from "./useMiscellaneousExpenses"
 
 export const useGastosVarios = () => {
-  const { gastosVarios, updateGastoDiario } = useGlobalContext()
+  const { gastosVarios, updateGastoDiario, updateGastoFijo } = useGlobalContext()
   const { expenses } = useExpenses()
+  const { miscellaneousExpenses } = useMiscellaneousExpenses()
 
   useEffect(() => {
     updateGastoDiario(getTotalExpense(expenses))
   }, [expenses])
 
-  const getTotalExpense = useCallback((expense: Expense[]) => expense.reduce((acum, expense) => acum + expense.amount, 0), [])
+  useEffect(() => {
+    updateGastoFijo(getTotalExpense(miscellaneousExpenses))
+  }, [miscellaneousExpenses])
+
+  const getTotalExpense = useCallback((expense: Expense[] | OtherExpense[]) => expense.reduce((acum, expense) => acum + expense.amount, 0), [])
   const gastoDiario = gastosVarios.find(item => item.title === "Gastos diarios")?.amount || 0
 
   return {
     gastosVarios,
     updateGastoDiario,
     getTotalExpense,
-    gastoDiario
+    gastoDiario,
   }
 }

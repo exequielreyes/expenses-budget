@@ -1,7 +1,7 @@
 'use client'
 
-import { BentoItemContainer, GastosVarios, LargeNumber, Restante, TablaGastos } from "@components";
-import { useEncrypt, useExpenses, useGastosVarios } from "@hooks";
+import { BentoItemContainer, GastosVarios, LargeNumber, Restante, TablaGastos, Table } from "@components";
+import { useEncrypt, useExpenses, useGastosVarios, useMiscellaneousExpenses } from "@hooks";
 import { useGastoTotal } from "@hooks/useGastoTotal";
 import { useIngresos } from "@hooks/useIngresos";
 import { decryptData, generateKey, getCryptoKeyFromDB, getDataFromLocalStorage, saveCryptoKeyToDB } from "@utils";
@@ -10,6 +10,7 @@ import { useEffect } from "react";
 export default function Home() {
 
   const { setExpenses } = useExpenses()
+  const { setMiscellaneousExpenses } = useMiscellaneousExpenses()
   const { updateGastoDiario, getTotalExpense } = useGastosVarios()
   const { sueldo, updateSueldo } = useIngresos()
   const { gastoTotal } = useGastoTotal()
@@ -34,12 +35,19 @@ export default function Home() {
       await setCryptoKey(cryptoKey)
       const encryptedExpenses = await getDataFromLocalStorage<{ encryptedData: string, iv: string }>('expenses')
       const encrtptedIngresos = await getDataFromLocalStorage<{ encryptedData: string, iv: string }>('ingresos')
+      const encryptedMiscellaneousExpenses = await getDataFromLocalStorage<{ encryptedData: string, iv: string }>('miscellaneousExpenses')
      
       if(encryptedExpenses) {
         const { encryptedData, iv } = encryptedExpenses
         const decryptedExpenses = await decryptData(cryptoKey as CryptoKey, encryptedData, iv)
         setExpenses(decryptedExpenses)
         updateGastoDiario(getTotalExpense(decryptedExpenses))
+      }
+
+      if(encryptedMiscellaneousExpenses) {
+        const { encryptedData, iv } = encryptedMiscellaneousExpenses
+        const decryptedMiscellaneousExpenses = await decryptData(cryptoKey as CryptoKey, encryptedData, iv)
+        setMiscellaneousExpenses(decryptedMiscellaneousExpenses)
       }
 
       if(encrtptedIngresos) {
@@ -81,9 +89,7 @@ export default function Home() {
         <BentoItemContainer className="col-start-9 row-start-6 col-span-5 row-span-7">
           <Restante />
         </BentoItemContainer>
-        <BentoItemContainer className="col-start-14 row-start-6 col-span-6 row-span-7">
-          <h1>Gastos fijos</h1>
-        </BentoItemContainer>
+        <Table className="table col-start-14 row-start-6 col-span-6 row-span-7" />
       </div>
 
     </main>
