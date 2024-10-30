@@ -67,10 +67,10 @@ export const TablaGastos = ({ className }: { className?: string }) => {
         </thead>
         <tbody>
           {expenses.map((item, index) => (
-            <tr key={`${item.date}-${index}`} className={`group ${index === expenses.length - 1 ? '' : 'border-b'} border-custom-dark-gray`}>
-              {Object.entries(item).map(([key, value]) =>
+            <tr key={index} className={`group ${index === expenses.length - 1 ? '' : 'border-b'} border-custom-dark-gray`}>
+              {Object.entries(item).map(([key, value], colIndex) =>
               (
-                <td key={key} className={`border-custom-dark-gray text-custom-light-gray text-base`}>
+                <td key={`${index}-${colIndex}`} className={`border-custom-dark-gray text-custom-light-gray text-base`}>
                   <InputItemTable index={index} fieldKey={key as keyof Expense} value={value} handleEdit={handleEdit} isDelete={isDelete} setIsDelete={setIsDelete} />
                 </td>
               ))}
