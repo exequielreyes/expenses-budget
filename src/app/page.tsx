@@ -67,48 +67,59 @@ export default function Home() {
   }, [])
 
   return (
-    <main className="m-auto max-w-[1670px] h-[calc(100vh-100px)]">
-      <div className="grid grid-cols-19 grid-rows-12 gap-6 p-4 w-full h-full">
+    <main className="m-auto max-w-[1670px]">
+      <div className="grid grid-cols-19 grid-rows-12 gap-6 py-4 w-full h-full">
         <TablaGastos className="table col-span-8 row-span-12 row-start-1 col-start-1" />
-        <LargeNumber
-          className="col-start-9 col-span-4 row-span-2 row-start-1"
-          title="Sueldo"
-          amount={sueldo}
-          setAmount={updateSueldo}
-          amountType="ingreso"
-          edit
-        />
+        <div className="flex flex-col gap-6 row-start-1 col-start-9 row-span-12 col-span-11">
+          <div className="flex gap-6">
+            <div className="flex flex-col gap-6">
+              <LargeNumber
+                title="Sueldo"
+                amount={sueldo}
+                setAmount={updateSueldo}
+                amountType="ingreso"
+                edit
+              />
+              <LargeNumber
+                title="Gasto total"
+                amount={gastoTotal}
+                amountType="gasto"
+              />
+            </div>
+            {/* className="col-start-13 col-span-3 row-span-5 row-start-1"  */}
+            <GastosVarios />
+            {/* className="table col-start-14 row-start-6 col-span-6 row-span-7" */}
+            <Table
+              className="table"
+              name="Gastos fijos"
+              otherExpenses={miscellaneousExpenses}
+              setOtherExpenses={setMiscellaneousExpenses}
+              addOtherExpense={addMiscellaneousExpense}
+              removeOtherExpense={removeMiscellaneousExpense}
+            />
+          </div>
+          <div className="flex gap-6 w-full">
+            {/* className="col-start-9 row-start-6 col-span-5 row-span-7" */}
+            <BentoItemContainer >
+              <Restante />
+            </BentoItemContainer>
+            {/* className="table col-start-16 col-span-4 row-span-5 row-start-1" */}
+            <Table
+              className="table"
+              name="Gastos boludos"
+              otherExpenses={stupidExpenses}
+              setOtherExpenses={setStupidExpenses}
+              addOtherExpense={addStupidExpense}
+              removeOtherExpense={removeStupidExpense}
+            />
+          </div>
+        </div>
 
-        <GastosVarios className="col-start-13 col-span-3 row-span-5 row-start-1" />
-
-        <Table
-          className="table col-start-16 col-span-4 row-span-5 row-start-1"
-          name="Gastos boludos"
-          otherExpenses={stupidExpenses}
-          setOtherExpenses={setStupidExpenses}
-          addOtherExpense={addStupidExpense}
-          removeOtherExpense={removeStupidExpense}
-        />
 
 
-        <LargeNumber
-          className="col-start-9 row-start-3 col-span-4 row-span-2"
-          title="Gasto total"
-          amount={gastoTotal}
-          amountType="gasto"
-        />
 
-        <BentoItemContainer className="col-start-9 row-start-6 col-span-5 row-span-7">
-          <Restante />
-        </BentoItemContainer>
-        <Table
-          className="table col-start-14 row-start-6 col-span-6 row-span-7"
-          name="Gastos fijos"
-          otherExpenses={miscellaneousExpenses}
-          setOtherExpenses={setMiscellaneousExpenses}
-          addOtherExpense={addMiscellaneousExpense}
-          removeOtherExpense={removeMiscellaneousExpense}
-        />
+
+
       </div>
 
     </main>

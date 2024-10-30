@@ -37,7 +37,7 @@ export const MoneyDisplay = ({ amount, amountType, setAmount, edit = false }: Mo
     setShowInput(false)
   }
   return (
-    <>
+    <div className="flex gap-2 w-full justify-between">
       {
         isAmountVisible
           ? (
@@ -67,7 +67,7 @@ export const MoneyDisplay = ({ amount, amountType, setAmount, edit = false }: Mo
       <IconButton onClick={changeVisibility}>
         {isAmountVisible ? <OpenEyeIcon className="size-6 stroke-custom-gray transition-all duration-200 hover:stroke-custom-light-gray" /> : <CloseEyeIcon className="size-6 stroke-custom-gray transition-all duration-200 hover:stroke-custom-light-gray" />}
       </IconButton>
-    </>
+    </div>
   )
 }
 
