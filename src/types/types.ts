@@ -4,13 +4,13 @@ export type Expense = {
   date: string;
   description: string;
   category: string;
-  total: number;
+  amount: number;
 }
 
-export type Transaccion = {
+export type Transaction = {
   title: string;
   amount: number;
   amountType: Money;
 }
 
-export type Transacciones = Transaccion[]
+export type Transactions = Transaction[]

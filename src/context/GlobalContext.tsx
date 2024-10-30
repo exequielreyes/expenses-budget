@@ -1,7 +1,7 @@
 "use client"
 
 import { useExpensesReducer, useGastosVariosReducer, useIngresosReducer } from '@reducers'
-import { Expense, Transacciones } from '../types/types'
+import { Expense, Transactions } from '../types/types'
 import { createContext, useContext, ReactNode, useState } from 'react'
 
 interface GlobalContextType {
@@ -11,11 +11,11 @@ interface GlobalContextType {
   removeExpense: (index: number) => void,
   cryptoKey: CryptoKey | undefined,
   setCryptoKey: (cryptoKey: CryptoKey | undefined) => void,
-  gastosVarios: Transacciones,
+  gastosVarios: Transactions,
   updateGastoBoludo: (newContent: number) => void,
   updateGastoDiario: (newContent: number) => void,
   updateGastoFijo: (newContent: number) => void,
-  ingresos: Transacciones,
+  ingresos: Transactions,
   updateSueldo:  (newAmount: number) => void,
   gastoTotal: number,
   setGastoTotal: (newAmount: number) => void,

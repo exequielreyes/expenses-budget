@@ -2,12 +2,12 @@
 
 import { useAmount, useGastosVarios } from "@hooks";
 import { BentoItemContainer } from "@components";
-import { Transaccion, Money } from "../types/types";
+import { Transaction, Money } from "../types/types";
 import NumberFlow from "@number-flow/react";
 
 // TODO: Refactorizar esto
 
-const GastoVarioItem = ({ gasto, className }: { gasto: Transaccion, className?: string }) => {
+const GastoVarioItem = ({ gasto, className }: { gasto: Transaction, className?: string }) => {
   const { textColor } = useAmount(gasto.amountType as Money)
 
   return (

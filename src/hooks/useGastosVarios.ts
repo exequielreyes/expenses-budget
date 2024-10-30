@@ -11,7 +11,7 @@ export const useGastosVarios = () => {
     updateGastoDiario(getTotalExpense(expenses))
   }, [expenses])
 
-  const getTotalExpense = useCallback((expense: Expense[]) => expense.reduce((acum, expense) => acum + expense.total, 0), [])
+  const getTotalExpense = useCallback((expense: Expense[]) => expense.reduce((acum, expense) => acum + expense.amount, 0), [])
   const gastoDiario = gastosVarios.find(item => item.title === "Gastos diarios")?.amount || 0
 
   return {

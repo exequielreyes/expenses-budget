@@ -1,73 +1,13 @@
 'use client'
 
-import { getDate, parseCurrency, priceFormat } from "@utils"
-import { BentoItemContainer, IconButton } from "@components"
+import { getDate } from "@utils"
+import { BentoItemContainer, IconButton, InputItemTable } from "@components"
 import { CalendarIcon, CategoryIcon, DescriptionIcon, DolarIcon, PlusIcon, TrashIcon } from "@icons"
 import { useExpenses } from "@hooks"
 import { Expense } from "../types/types"
-import { ChangeEvent, useEffect, useState } from "react"
+import { useState } from "react"
 
 // TODO: Refactorizar esto
-
-type InputItemProps = {
-  index: number,
-  fieldKey: keyof Expense,
-  value: string | number,
-  handleEdit: (index: number, key: keyof Expense, value: string) => void
-  isDelete: boolean,
-  setIsDelete: (isDelete: boolean) => void
-}
-
-const InputItem = ({ index, fieldKey, value, handleEdit, isDelete, setIsDelete }: Readonly<InputItemProps>) => {
-  const [inputValue, setInputValue] = useState<string>(
-    fieldKey === "total" ? priceFormat(parseCurrency(value.toString())) : value.toString()
-  );
-
-  useEffect(() => {
-    const formattedValue =
-      fieldKey === "total"
-        ? priceFormat(parseCurrency(value.toString()))
-        : value.toString()
-
-    if (formattedValue !== inputValue) {
-      setInputValue(formattedValue)
-    }
-    setIsDelete(false)
-
-  }, [isDelete])
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value
-    setInputValue(rawValue)
-    handleEdit(index, fieldKey as keyof Expense, rawValue)
-  }
-
-  const handleBlur = () => {
-    if (fieldKey === "total") {
-      const parsedValue = parseCurrency(inputValue)
-      handleEdit(index, fieldKey as keyof Expense, parsedValue.toString())
-      setInputValue(priceFormat(parsedValue))
-    }
-  }
-
-  const handleFocus = () => {
-    if (fieldKey === "total") {
-      const stringValue = value.toString().replace('.', ',')
-      setInputValue(stringValue === "0" ? "" : stringValue)
-    }
-  }
-
-  return (
-    <input
-      type="text"
-      value={inputValue}
-      onChange={(e) => handleChange(e)}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
-      className="w-full bg-transparent border-none p-3 focus:outline-none focus:bg-custom-dark-gray"
-    />
-  )
-}
 
 export const TablaGastos = ({ className }: { className?: string }) => {
 
@@ -82,14 +22,14 @@ export const TablaGastos = ({ className }: { className?: string }) => {
       return isNaN(parsedValue) ? 0 : parsedValue
     }
 
-    const newValue = key === 'total' ? parseFloatValue(value) : value
+    const newValue = key === 'amount' ? parseFloatValue(value) : value
 
     newData[index] = { ...newData[index], [key]: newValue }
     setExpenses(newData)
   }
 
   const handleAddExpense = () => {
-    addExpense({ date: getDate(), description: "", category: "", total: 0 })
+    addExpense({ date: getDate(), description: "", category: "", amount: 0 })
   }
 
   const handleDeleteExpense = (index: number) => {
@@ -131,13 +71,13 @@ export const TablaGastos = ({ className }: { className?: string }) => {
               {Object.entries(item).map(([key, value]) =>
               (
                 <td key={key} className={`border-custom-dark-gray text-custom-light-gray text-base`}>
-                  <InputItem index={index} fieldKey={key as keyof Expense} value={value} handleEdit={handleEdit} isDelete={isDelete} setIsDelete={setIsDelete} />
+                  <InputItemTable index={index} fieldKey={key as keyof Expense} value={value} handleEdit={handleEdit} isDelete={isDelete} setIsDelete={setIsDelete} />
                 </td>
               ))}
               <td className="border-custom-dark-gray text-center">
-                <IconButton 
-                className="inline-block text-transparent group-hover:text-custom-light-gray transition-all ease-out duration-700 group-hover:duration-200"
-                onClick={() => handleDeleteExpense(index)}>
+                <IconButton
+                  className="inline-block text-transparent group-hover:text-custom-light-gray transition-all ease-out duration-700 group-hover:duration-200"
+                  onClick={() => handleDeleteExpense(index)}>
                   <TrashIcon className="size-6" />
                 </IconButton>
               </td>

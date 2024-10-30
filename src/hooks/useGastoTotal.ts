@@ -1,7 +1,7 @@
 import { useGlobalContext } from "@context/GlobalContext"
 import { useCallback, useEffect } from "react"
 import { useGastosVarios } from "./useGastosVarios"
-import { Transacciones } from "../types/types"
+import { Transactions } from "../types/types"
 
 export const useGastoTotal = () => {
   const { gastoTotal, setGastoTotal } = useGlobalContext()
@@ -12,7 +12,7 @@ export const useGastoTotal = () => {
     setGastoTotal(total)
   }, [gastosVarios])
 
-  const getGastoTotal = useCallback((gastosVarios: Transacciones) => (gastosVarios.reduce((acum, gasto) => acum + gasto.amount, 0)), [])
+  const getGastoTotal = useCallback((gastosVarios: Transactions) => (gastosVarios.reduce((acum, gasto) => acum + gasto.amount, 0)), [])
 
   return { gastoTotal, setGastoTotal }
 }

@@ -1,10 +1,10 @@
-import { Transacciones } from "../types/types"
+import { Transactions } from "../types/types"
 
 type Action = { type: 'UPDATE_INGRESOS'; payload: { title: string; newAmount: number } }
 
-export const initialIngresos: Transacciones = [{ title: 'sueldo', amount: 0, amountType: 'ingreso' }]
+export const initialIngresos: Transactions = [{ title: 'sueldo', amount: 0, amountType: 'ingreso' }]
 
-export const ingresosReducer = (state: Transacciones, action: Action) => {
+export const ingresosReducer = (state: Transactions, action: Action) => {
   const { type, payload } = action
   switch (type) {
     case 'UPDATE_INGRESOS':
