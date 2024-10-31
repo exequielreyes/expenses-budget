@@ -1,7 +1,7 @@
 'use client'
 
 import { getDate } from "@utils"
-import { BentoItemContainer, IconButton, InputItemTable } from "@components"
+import { BentoItemContainer, DatePicker, IconButton, InputItemTable } from "@components"
 import { CalendarIcon, CategoryIcon, DescriptionIcon, DolarIcon, PlusIcon, TrashIcon } from "@icons"
 import { useExpenses } from "@hooks"
 import { Expense } from "../types/types"
@@ -70,8 +70,12 @@ export const TablaGastos = ({ className }: { className?: string }) => {
             <tr key={index} className={`group ${index === expenses.length - 1 ? '' : 'border-b'} border-custom-dark-gray ${item.amount as number < 0 ? 'bg-custom-green/15' : ''}`}>
               {Object.entries(item).map(([key, value], colIndex) =>
               (
-                <td key={`${index}-${colIndex}`} className={`border-custom-dark-gray text-custom-light-gray text-base`}>
-                  <InputItemTable index={index} fieldKey={key as keyof Expense} value={value} handleEdit={handleEdit} isDelete={isDelete} setIsDelete={setIsDelete} />
+                <td key={`${index}-${colIndex}`} className="border-custom-dark-gray text-custom-light-gray text-base">
+                  {
+                    key === 'date'
+                      ? <DatePicker value={value as string} onChange={(date) => handleEdit(index, 'date', date)} />
+                      : <InputItemTable index={index} fieldKey={key as keyof Expense} value={value} handleEdit={handleEdit} isDelete={isDelete} setIsDelete={setIsDelete} />
+                  }
                 </td>
               ))}
               <td className="border-custom-dark-gray text-center">

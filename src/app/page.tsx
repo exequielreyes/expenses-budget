@@ -86,9 +86,7 @@ export default function Home() {
                 amountType="gasto"
               />
             </div>
-            {/* className="col-start-13 col-span-3 row-span-5 row-start-1"  */}
             <GastosVarios />
-            {/* className="table col-start-14 row-start-6 col-span-6 row-span-7" */}
             <Table
               className="table"
               name="Gastos fijos"
@@ -99,11 +97,9 @@ export default function Home() {
             />
           </div>
           <div className="flex gap-6 w-full">
-            {/* className="col-start-9 row-start-6 col-span-5 row-span-7" */}
             <BentoItemContainer >
               <Restante />
             </BentoItemContainer>
-            {/* className="table col-start-16 col-span-4 row-span-5 row-start-1" */}
             <Table
               className="table"
               name="Gastos boludos"
@@ -114,14 +110,7 @@ export default function Home() {
             />
           </div>
         </div>
-
-
-
-
-
-
       </div>
-
     </main>
   );
 }
