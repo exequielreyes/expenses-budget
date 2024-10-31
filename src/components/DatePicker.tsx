@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { format } from "date-fns"
-import { Calendar as CalendarIcon } from "lucide-react"
+// import { Calendar as CalendarIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -12,6 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { es } from "date-fns/locale/es"
 
 export function DatePicker({value, onChange}: {value: string, onChange: (date: string) => void}) {
   const [date, setDate] = React.useState<Date>(new Date(value))
@@ -42,6 +43,7 @@ export function DatePicker({value, onChange}: {value: string, onChange: (date: s
       <PopoverContent className="w-auto p-0">
         <Calendar
           mode="single"
+          locale={es}
           selected={date}
           onSelect={handleChange}
           initialFocus
