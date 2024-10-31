@@ -59,7 +59,7 @@ export const InputItemTable = <T extends Expense | OtherExpense>({ index, fieldK
       onChange={(e) => handleChange(e)}
       onFocus={fieldKey === "amount" ? handleFocus : undefined}
       onBlur={fieldKey === "amount" ? handleBlur : undefined}
-      className="w-full bg-transparent border-none p-3 focus:outline-none focus:bg-custom-dark-gray"
+      className="w-full bg-transparent rounded-sm m-1 border-none p-2 focus:outline-none focus:bg-custom-dark-gray/50"
     />
   )
 }

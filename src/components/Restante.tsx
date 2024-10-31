@@ -26,7 +26,7 @@ const chartConfig = {
 
 const RestanteItem = ({ title, amount }: { title: string, amount: number }) => {
   return (
-    <div className="flex w-full justify-between ">
+    <div className="flex w-full justify-between gap-2">
       <p className="text-white font-normal text-lg" >{title}</p>
       <NumberFlow
         value={amount}

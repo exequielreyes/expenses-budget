@@ -67,7 +67,7 @@ export const TablaGastos = ({ className }: { className?: string }) => {
         </thead>
         <tbody>
           {expenses.map((item, index) => (
-            <tr key={index} className={`group ${index === expenses.length - 1 ? '' : 'border-b'} border-custom-dark-gray`}>
+            <tr key={index} className={`group ${index === expenses.length - 1 ? '' : 'border-b'} border-custom-dark-gray ${item.amount as number < 0 ? 'bg-custom-green/15' : ''}`}>
               {Object.entries(item).map(([key, value], colIndex) =>
               (
                 <td key={`${index}-${colIndex}`} className={`border-custom-dark-gray text-custom-light-gray text-base`}>
