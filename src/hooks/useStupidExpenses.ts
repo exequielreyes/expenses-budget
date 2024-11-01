@@ -10,8 +10,7 @@ export const useStupidExpenses = () => {
       const { encryptedData, iv } = await encryptData(cryptoKey as CryptoKey, stupidExpenses)
       setDataInLocalStorage('stupidExpenses', { encryptedData, iv })
     }
-
-    if (stupidExpenses && stupidExpenses.length > 0) {
+    if (stupidExpenses && cryptoKey) {
       syncWithLocalStorage()
     }
   }, [stupidExpenses])

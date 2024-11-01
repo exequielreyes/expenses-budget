@@ -10,7 +10,7 @@ export const useExpenses = () => {
       setDataInLocalStorage('expenses', { encryptedData, iv })
     }
 
-    if (expenses && expenses.length > 0) {
+    if (expenses && cryptoKey) {
       syncWithLocalStorage()
     }
   }, [expenses])

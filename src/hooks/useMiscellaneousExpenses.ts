@@ -11,7 +11,7 @@ export const useMiscellaneousExpenses = () => {
       setDataInLocalStorage('miscellaneousExpenses', { encryptedData, iv })
     }
 
-    if (miscellaneousExpenses && miscellaneousExpenses.length > 0) {
+    if (miscellaneousExpenses && cryptoKey) {
       syncWithLocalStorage()
     }
   }, [miscellaneousExpenses])
