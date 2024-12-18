@@ -15,6 +15,11 @@
     "utils": "@/lib/utils",
     "ui": "@/components/ui",
     "lib": "@/lib",
-    "hooks": "@/hooks"
+    "hooks": "@/hooks",
+    "reducers": "@/reducers",
+    "context": "@/context",
+    "types": "@/types",
+    "services": "@/services",
+    "icons": "@/icons"
   }
 }

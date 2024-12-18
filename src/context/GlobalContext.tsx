@@ -1,7 +1,7 @@
 "use client"
 
-import { useExpensesReducer, useGastosVariosReducer, useIngresosReducer, useMiscellaneousExpensesReducer, useStupidExpensesReducer } from '@reducers'
-import { Expense, OtherExpense, Transactions } from '../types/types'
+import { useExpensesReducer, useGastosVariosReducer, useIngresosReducer, useMiscellaneousExpensesReducer, useStupidExpensesReducer } from '@/reducers'
+import { Expense, OtherExpense, Transactions } from '@/types/types'
 import { createContext, useContext, ReactNode, useState } from 'react'
 
 interface GlobalContextType {
