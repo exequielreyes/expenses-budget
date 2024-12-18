@@ -37,6 +37,16 @@ export const TablaGastos = ({ className }: { className?: string }) => {
     setIsDelete(true)
   }
 
+  const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>, key: keyof typeof expenses[number]) => {
+    if (e.key !== 'Enter') return
+
+    if (key === 'amount') {
+      handleAddExpense()
+    } else {
+      (e.target as HTMLInputElement).blur()
+    }
+  }
+
   return (
     <BentoItemContainer className={className}>
       <table className="w-full text-left border-collapse">
@@ -74,7 +84,15 @@ export const TablaGastos = ({ className }: { className?: string }) => {
                   {
                     key === 'date'
                       ? <DatePicker value={value as string} onChange={(date) => handleEdit(index, 'date', date)} />
-                      : <InputItemTable index={index} fieldKey={key as keyof Expense} value={value} handleEdit={handleEdit} isDelete={isDelete} setIsDelete={setIsDelete} />
+                      : <InputItemTable
+                        onKeyDown={(e) => handleKeyDown(e, key as keyof Expense)}
+                        index={index}
+                        fieldKey={key as keyof Expense}
+                        value={value}
+                        handleEdit={handleEdit}
+                        isDelete={isDelete}
+                        setIsDelete={setIsDelete}
+                      />
                   }
                 </td>
               ))}

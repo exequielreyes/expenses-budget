@@ -10,12 +10,13 @@ type InputItemProps<T> = {
   value: string | number,
   handleEdit: (index: number, key: keyof T, value: string) => void
   isDelete: boolean,
-  setIsDelete: (isDelete: boolean) => void
+  setIsDelete: (isDelete: boolean) => void,
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void,
 }
 
 // TODO: Refactorizar esto
 
-export const InputItemTable = <T extends Expense | OtherExpense>({ index, fieldKey, value, handleEdit, isDelete, setIsDelete }: Readonly<InputItemProps<T>>) => {
+export const InputItemTable = <T extends Expense | OtherExpense>({ index, fieldKey, value, handleEdit, isDelete, setIsDelete, onKeyDown }: Readonly<InputItemProps<T>>) => {
   const [inputValue, setInputValue] = useState<string>(
     fieldKey === "amount" ? priceFormat(parseCurrency(value.toString())) : value.toString()
   );
@@ -59,6 +60,7 @@ export const InputItemTable = <T extends Expense | OtherExpense>({ index, fieldK
       onChange={(e) => handleChange(e)}
       onFocus={fieldKey === "amount" ? handleFocus : undefined}
       onBlur={fieldKey === "amount" ? handleBlur : undefined}
+      onKeyDown={onKeyDown}
       className="w-full bg-transparent rounded-sm m-1 border-none p-2 focus:outline-none focus:bg-custom-dark-gray/50"
     />
   )
