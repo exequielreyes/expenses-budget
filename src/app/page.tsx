@@ -1,6 +1,7 @@
 'use client'
 
 import { BentoItemContainer, GastosVarios, LargeNumber, Restante, TablaGastos, Table } from "@components";
+import { ExpensesMenu } from "@components/ExpensesMenu";
 import { useEncrypt, useExpenses, useGastosVarios, useGastoTotal, useIngresos, useMiscellaneousExpenses, useStupidExpenses } from "@hooks";
 import { decryptData, generateKey, getCryptoKeyFromDB, getDataFromLocalStorage, saveCryptoKeyToDB } from "@utils";
 import { useEffect } from "react";
@@ -68,46 +69,49 @@ export default function Home() {
 
   return (
     <main className="m-auto max-w-[1670px]">
-      <div className="grid grid-cols-19 grid-rows-12 gap-6 py-4 w-full h-full">
-        <TablaGastos className="table col-span-8 row-span-12 row-start-1 col-start-1" />
-        <div className="flex flex-col gap-6 row-start-1 col-start-9 row-span-12 col-span-11">
-          <div className="flex gap-6">
-            <div className="flex flex-col gap-6">
-              <LargeNumber
-                title="Sueldo"
-                amount={sueldo}
-                setAmount={updateSueldo}
-                amountType="ingreso"
-                edit
-              />
-              <LargeNumber
-                title="Gasto total"
-                amount={gastoTotal}
-                amountType="gasto"
+      <div className="py-4 w-full h-full flex flex-col gap-4">
+        <ExpensesMenu />
+        <div className="grid grid-cols-19 grid-rows-12 gap-6">
+          <TablaGastos className="table col-span-8 row-span-12 row-start-1 col-start-1" />
+          <div className="flex flex-col gap-6 row-start-1 col-start-9 row-span-12 col-span-11">
+            <div className="flex gap-6">
+              <div className="flex flex-col gap-6">
+                <LargeNumber
+                  title="Sueldo"
+                  amount={sueldo}
+                  setAmount={updateSueldo}
+                  amountType="ingreso"
+                  edit
+                />
+                <LargeNumber
+                  title="Gasto total"
+                  amount={gastoTotal}
+                  amountType="gasto"
+                />
+              </div>
+              <GastosVarios />
+              <Table
+                className="table"
+                name="Gastos fijos"
+                otherExpenses={miscellaneousExpenses}
+                setOtherExpenses={setMiscellaneousExpenses}
+                addOtherExpense={addMiscellaneousExpense}
+                removeOtherExpense={removeMiscellaneousExpense}
               />
             </div>
-            <GastosVarios />
-            <Table
-              className="table"
-              name="Gastos fijos"
-              otherExpenses={miscellaneousExpenses}
-              setOtherExpenses={setMiscellaneousExpenses}
-              addOtherExpense={addMiscellaneousExpense}
-              removeOtherExpense={removeMiscellaneousExpense}
-            />
-          </div>
-          <div className="flex gap-6 w-full">
-            <BentoItemContainer >
-              <Restante />
-            </BentoItemContainer>
-            <Table
-              className="table"
-              name="Gastos boludos"
-              otherExpenses={stupidExpenses}
-              setOtherExpenses={setStupidExpenses}
-              addOtherExpense={addStupidExpense}
-              removeOtherExpense={removeStupidExpense}
-            />
+            <div className="flex gap-6 w-full">
+              <BentoItemContainer >
+                <Restante />
+              </BentoItemContainer>
+              <Table
+                className="table"
+                name="Gastos boludos"
+                otherExpenses={stupidExpenses}
+                setOtherExpenses={setStupidExpenses}
+                addOtherExpense={addStupidExpense}
+                removeOtherExpense={removeStupidExpense}
+              />
+            </div>
           </div>
         </div>
       </div>
