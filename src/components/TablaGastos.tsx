@@ -1,11 +1,13 @@
 'use client'
 
-import { getDate } from "@utils"
+import { decryptData, getDataFromLocalStorage, getDate } from "@utils"
 import { BentoItemContainer, DatePicker, IconButton, InputItemTable } from "@components"
 import { CalendarIcon, CategoryIcon, DescriptionIcon, DolarIcon, PlusIcon, TrashIcon } from "@icons"
-import { useExpenses } from "@hooks"
+import { useEncrypt, useExpenses, useGastosVarios } from "@hooks"
 import { Expense } from "../types/types"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { SelectDropdown } from "./SelectDropdown"
+import { useCategories } from "@hooks/useCategories"
 
 // TODO: Refactorizar esto
 
@@ -13,6 +15,25 @@ export const TablaGastos = ({ className }: { className?: string }) => {
 
   const { expenses, setExpenses, addExpense, removeExpense } = useExpenses()
   const [isDelete, setIsDelete] = useState<boolean>(false)
+  const { cryptoKey } = useEncrypt()
+  const { updateGastoDiario, getTotalExpense } = useGastosVarios()
+  const { categories } = useCategories()
+
+  useEffect(() => {
+    const getExpenses = async () => {
+      const encryptedExpenses = await getDataFromLocalStorage<{ encryptedData: string, iv: string }>('expenses')
+
+      if (encryptedExpenses) {
+        const { encryptedData, iv } = encryptedExpenses
+        const decryptedExpenses = await decryptData(cryptoKey as CryptoKey, encryptedData, iv)
+        setExpenses(decryptedExpenses)
+        updateGastoDiario(getTotalExpense(decryptedExpenses))
+      }
+    }
+
+    if (cryptoKey) getExpenses()
+
+  }, [cryptoKey])
 
   const handleEdit = (index: number, key: keyof typeof expenses[number], value: string) => {
     const newData = [...expenses]
@@ -84,18 +105,21 @@ export const TablaGastos = ({ className }: { className?: string }) => {
                   {
                     key === 'date'
                       ? <DatePicker value={value as string} onChange={(date) => handleEdit(index, 'date', date)} />
-                      : <InputItemTable
-                        onKeyDown={(e) => handleKeyDown(e, key as keyof Expense)}
-                        index={index}
-                        fieldKey={key as keyof Expense}
-                        value={value}
-                        handleEdit={handleEdit}
-                        isDelete={isDelete}
-                        setIsDelete={setIsDelete}
-                      />
+                      : key === 'category'
+                        ? <SelectDropdown values={categories} selectedValue= {value ? value as string : "otro"} setSelectedValue={(value) => handleEdit(index, 'category', value)} />
+                        : <InputItemTable
+                          onKeyDown={(e) => handleKeyDown(e, key as keyof Expense)}
+                          index={index}
+                          fieldKey={key as keyof Expense}
+                          value={value}
+                          handleEdit={handleEdit}
+                          isDelete={isDelete}
+                          setIsDelete={setIsDelete}
+                        />
                   }
                 </td>
-              ))}
+              )
+              )}
               <td className="border-custom-dark-gray text-center">
                 <IconButton
                   className="inline-block text-transparent group-hover:text-custom-light-gray transition-all ease-out duration-700 group-hover:duration-200"

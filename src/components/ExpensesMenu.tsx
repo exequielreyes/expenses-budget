@@ -1,19 +1,20 @@
 import { SelectDropdown } from "@components/SelectDropdown";
-import { BentoItemContainer } from "./BentoItemContainer";
+import { BentoItemContainer } from "@components/BentoItemContainer";
+import { getMonth, getYear } from "@utils/getCurrentDate";
 
 const monts = [
-  { value: "enero", label: "Enero" },
-  { value: "febrero", label: "Febrero" },
-  { value: "marzo", label: "Marzo" },
-  { value: "abril", label: "Abril" },
-  { value: "mayo", label: "Mayo" },
-  { value: "junio", label: "Junio" },
-  { value: "julio", label: "Julio" },
-  { value: "agosto", label: "Agosto" },
-  { value: "septiembre", label: "Septiembre" },
-  { value: "octubre", label: "Octubre" },
-  { value: "noviembre", label: "Noviembre" },
-  { value: "diciembre", label: "Diciembre" },
+  { value: "1", label: "Enero" },
+  { value: "2", label: "Febrero" },
+  { value: "3", label: "Marzo" },
+  { value: "4", label: "Abril" },
+  { value: "5", label: "Mayo" },
+  { value: "6", label: "Junio" },
+  { value: "7", label: "Julio" },
+  { value: "8", label: "Agosto" },
+  { value: "9", label: "Septiembre" },
+  { value: "10", label: "Octubre" },
+  { value: "11", label: "Noviembre" },
+  { value: "12", label: "Diciembre" },
 ];
 
 const years = [
@@ -33,6 +34,7 @@ const years = [
 ];
 
 export const ExpensesMenu = () => {
+
   return (
     <BentoItemContainer>
       <div className="py-4">
@@ -40,8 +42,8 @@ export const ExpensesMenu = () => {
         <h4 className="text-sm text-custom-light-gray">Elegí el periodo del que deseas ver los gastos</h4>
       </div>
       <div className="flex gap-4 w-full ">
-        <SelectDropdown values={monts} placeholder="Mes" />
-        <SelectDropdown values={years} placeholder="Año" />
+        <SelectDropdown values={monts} selectedValue={getMonth().toString()} setSelectedValue={() => { }} />
+        <SelectDropdown values={years} selectedValue={getYear().toString()} setSelectedValue={() => { }} />
       </div>
     </BentoItemContainer>
   );

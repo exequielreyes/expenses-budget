@@ -2,20 +2,19 @@
 
 import { BentoItemContainer, GastosVarios, LargeNumber, Restante, TablaGastos, Table } from "@components";
 import { ExpensesMenu } from "@components/ExpensesMenu";
-import { useEncrypt, useExpenses, useGastosVarios, useGastoTotal, useIngresos, useMiscellaneousExpenses, useStupidExpenses } from "@hooks";
+import { useEncrypt, useGastoTotal, useIngresos, useMiscellaneousExpenses, useStupidExpenses } from "@hooks";
 import { decryptData, generateKey, getCryptoKeyFromDB, getDataFromLocalStorage, saveCryptoKeyToDB } from "@utils";
 import { useEffect } from "react";
 
 export default function Home() {
 
-  const { setExpenses } = useExpenses()
   const { miscellaneousExpenses, setMiscellaneousExpenses, addMiscellaneousExpense, removeMiscellaneousExpense } = useMiscellaneousExpenses()
   const { stupidExpenses, setStupidExpenses, addStupidExpense, removeStupidExpense } = useStupidExpenses()
-  const { updateGastoDiario, getTotalExpense } = useGastosVarios()
   const { sueldo, updateSueldo } = useIngresos()
   const { gastoTotal } = useGastoTotal()
   const { setCryptoKey } = useEncrypt()
 
+  // Separar este useEffect hacia los componentes (ya lo hice con expenses en TablaGastos)
   useEffect(() => {
 
     const initializeCryptoKey = async () => {
@@ -33,17 +32,9 @@ export default function Home() {
     const getExpenses = async () => {
       const cryptoKey = await initializeCryptoKey()
       await setCryptoKey(cryptoKey)
-      const encryptedExpenses = await getDataFromLocalStorage<{ encryptedData: string, iv: string }>('expenses')
       const encrtptedIngresos = await getDataFromLocalStorage<{ encryptedData: string, iv: string }>('ingresos')
       const encryptedMiscellaneousExpenses = await getDataFromLocalStorage<{ encryptedData: string, iv: string }>('miscellaneousExpenses')
       const encryptedStupidExpenses = await getDataFromLocalStorage<{ encryptedData: string, iv: string }>('stupidExpenses')
-
-      if (encryptedExpenses) {
-        const { encryptedData, iv } = encryptedExpenses
-        const decryptedExpenses = await decryptData(cryptoKey as CryptoKey, encryptedData, iv)
-        setExpenses(decryptedExpenses)
-        updateGastoDiario(getTotalExpense(decryptedExpenses))
-      }
 
       if (encryptedMiscellaneousExpenses) {
         const { encryptedData, iv } = encryptedMiscellaneousExpenses

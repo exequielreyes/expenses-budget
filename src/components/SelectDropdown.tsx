@@ -13,14 +13,16 @@ import {
 type SelectDropdown = {
   name?: string
   values: { value: string, label: string }[]
-  placeholder?: string
+  selectedValue: string,
+  setSelectedValue: (value: string) => void
 }
 
-export const SelectDropdown = ({ name, values, placeholder = "Selecciona una opción" }: SelectDropdown) => {
+export const SelectDropdown = ({ name, values, selectedValue, setSelectedValue }: SelectDropdown) => {
+
   return (
-    <Select>
+    <Select onValueChange={setSelectedValue}>
       <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder={placeholder} />
+        <SelectValue placeholder={values.find(({ value }) => value === selectedValue)?.label} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
