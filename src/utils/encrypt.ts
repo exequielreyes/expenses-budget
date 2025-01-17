@@ -74,3 +74,10 @@ export const importCryptoKey = async (keyBase64: string): Promise<CryptoKey> => 
     ['encrypt', 'decrypt']
   );
 };
+
+const encoder = new TextEncoder();
+
+export const toUint8Array = (key: string) => {
+  const encoded = encoder.encode(key);
+  return encoded.toString()
+}

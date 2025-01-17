@@ -1,5 +1,6 @@
+'use client'
+
 import {
-  Github,
   LogOut,
   Settings,
   User,
@@ -15,16 +16,33 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { UserAvatar } from "./UserAvatar"
+import { useGlobalContext } from "@context/GlobalContext"
+//  import { UserAvatar } from "./UserAvatar"
+import userImage from "@public/user.webp"
+import Image from "next/image"
+import { useGoogleAuth } from "@hooks/useGoogleAuth"
+import { useRouter } from "next/navigation"
 
 export const UserMenu = () => {
+
+  const { signOutWhithGoogle } = useGoogleAuth()
+  const { userData } = useGlobalContext()
+  const { image, name } = userData || { image: userImage, email: 'user@email.com' }
+  const router = useRouter()
+
+  const handleSignOut = async () => {
+    await signOutWhithGoogle()
+    router.push('/')
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <UserAvatar image="https://leomoreno.vercel.app/me.webp" alt='@leomoreno' nameInitials='LM' />
+        {/* <UserAvatar image="https://leomoreno.vercel.app/me.webp" alt='@leomoreno' nameInitials='LM' /> */}
+        <Image src={image} alt={`Avatar de ${name}`} className="rounded-full max-w-min" width={40} height={40} />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
+        <DropdownMenuLabel>{ name ? name : 'Mi cuenta'}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
@@ -40,13 +58,8 @@ export const UserMenu = () => {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <Github />
-          <span>GitHub</span>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
           <LogOut />
-          <span>Cerrar sesión</span>
+          <span onClick={handleSignOut}>Cerrar sesión</span>
           <DropdownMenuShortcut>Ctrl + Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>

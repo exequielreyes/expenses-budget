@@ -39,7 +39,7 @@ export const ExpensesMenu = () => {
     <BentoItemContainer>
       <div className="py-4">
         <h3 className="font-bold">Seleccionar periodo</h3>
-        <h4 className="text-sm text-custom-light-gray">Elegí el periodo del que deseas ver los gastos</h4>
+        <h4 className="text-sm text-custom-light-gray">Elegí el periodo del cual deseas ver tus gastos</h4>
       </div>
       <div className="flex gap-4 w-full ">
         <SelectDropdown values={monts} selectedValue={getMonth().toString()} setSelectedValue={() => { }} />

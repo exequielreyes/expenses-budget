@@ -19,3 +19,10 @@ export type Transaction = {
 }
 
 export type Transactions = Transaction[]
+
+export type UserData = {
+  name: string;
+  image: string;
+  email: string;
+  uid: string;
+}

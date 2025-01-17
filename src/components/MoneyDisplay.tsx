@@ -33,7 +33,6 @@ export const MoneyDisplay = ({ amount, amountType, setAmount, edit = false }: Mo
   }
 
   const handleBlur = () => {
-    console.log('handleBlur')
     setShowInput(false)
   }
   return (

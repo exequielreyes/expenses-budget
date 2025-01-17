@@ -1,7 +1,7 @@
 "use client"
 
 import { useExpensesReducer, useGastosVariosReducer, useIngresosReducer, useMiscellaneousExpensesReducer, useStupidExpensesReducer } from '@/reducers'
-import { Expense, OtherExpense, Transactions } from '@/types/types'
+import { Expense, OtherExpense, Transactions, UserData } from '@/types/types'
 import { createContext, useContext, ReactNode, useState } from 'react'
 
 interface GlobalContextType {
@@ -27,6 +27,8 @@ interface GlobalContextType {
   setStupidExpenses: (stupidExpenses: OtherExpense[]) => void,
   addStupidExpense: (stupidExpense: OtherExpense) => void,
   removeStupidExpense: (index: number) => void,
+  userData: UserData | null,
+  setUserData: (userData: UserData | null) => void
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined)
@@ -34,6 +36,7 @@ const GlobalContext = createContext<GlobalContextType | undefined>(undefined)
 export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [cryptoKey, setCryptoKey] = useState<CryptoKey>()
   const [gastoTotal, setGastoTotal] = useState<number>(0)
+  const [userData, setUserData] = useState<UserData | null>(null)
   
   const { expenses, setExpenses, addExpense, removeExpense } = useExpensesReducer()
   const { miscellaneousExpenses, setMiscellaneousExpenses, addMiscellaneousExpense, removeMiscellaneousExpense } = useMiscellaneousExpensesReducer()
@@ -64,7 +67,9 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
       stupidExpenses,
       setStupidExpenses,
       addStupidExpense,
-      removeStupidExpense
+      removeStupidExpense,
+      userData,
+      setUserData
     }}>
       {children}
     </GlobalContext.Provider>
