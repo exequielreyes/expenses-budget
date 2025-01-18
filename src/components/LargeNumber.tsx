@@ -12,7 +12,7 @@ type LargeNumber = {
   edit?: boolean;
 };
 
-export const LargeNumber = ({ className, title, amount, setAmount, amountType, edit = false }: Readonly<LargeNumber>) => {
+export default function LargeNumber({ className, title, amount, setAmount, amountType, edit = false }: Readonly<LargeNumber>) {
 
   return (
     <BentoItemContainer className={className}>

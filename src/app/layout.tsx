@@ -8,7 +8,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Expenses Budget | Controla tus gastos de la mejor manera perro",
+  title: "Expenses Budget | Controla tus gastos",
   description: "Expenses Budget es un simple app para controlar tus gastos",
 };
 

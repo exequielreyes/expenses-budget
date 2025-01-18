@@ -1,6 +1,5 @@
 import { importX509, jwtVerify } from 'jose'
 import { NextRequest, NextResponse } from 'next/server'
-// TODO: Desinstalar las demas dependencias que no usé.
 
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get(process.env.NEXT_PUBLIC_TOKEN_NAME!)?.value
@@ -26,15 +25,17 @@ export async function middleware(request: NextRequest) {
     }
 
     const publicKey = await importX509(publicKeyPEM, 'RS256')
-
-    await jwtVerify(token, publicKey, {
+ 
+    const { payload } = await jwtVerify(token, publicKey, {
       issuer: `https://securetoken.google.com/${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}`,
       audience: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
     })
 
     console.log('Token válido')
+    const responseNext = NextResponse.next()
+    responseNext.headers.set('x-user-email', payload.email as string)
 
-    return NextResponse.next()
+    return responseNext
   } catch (error) {
     console.error('Error al verificar el token:', error)
     return NextResponse.redirect(new URL('/logout', request.url))

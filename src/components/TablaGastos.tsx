@@ -1,72 +1,72 @@
 'use client'
 
-import { decryptData, getDataFromLocalStorage, getDate } from "@utils"
+// import { decryptData, getDataFromLocalStorage, getDate } from "@utils"
 import { BentoItemContainer, DatePicker, IconButton, InputItemTable } from "@components"
 import { CalendarIcon, CategoryIcon, DescriptionIcon, DolarIcon, PlusIcon, TrashIcon } from "@icons"
-import { useEncrypt, useExpenses, useGastosVarios } from "@hooks"
+// import { useEncrypt, useExpenses, useGastosVarios } from "@hooks"
 import { Expense } from "../types/types"
-import { useEffect, useState } from "react"
+// import { useEffect, useState } from "react"
 import { SelectDropdown } from "./SelectDropdown"
-import { useCategories } from "@hooks/useCategories"
+// import { useCategories } from "@hooks/useCategories"
 
 // TODO: Refactorizar esto
 
-export const TablaGastos = ({ className }: { className?: string }) => {
+export const TablaGastos = ({ expenses, categories, className }: { expenses: Expense[], categories: { value: string; label: string; }[], className?: string }) => {
 
-  const { expenses, setExpenses, addExpense, removeExpense } = useExpenses()
-  const [isDelete, setIsDelete] = useState<boolean>(false)
-  const { cryptoKey } = useEncrypt()
-  const { updateGastoDiario, getTotalExpense } = useGastosVarios()
-  const { categories } = useCategories()
+  // const { expenses, setExpenses, addExpense, removeExpense } = useExpenses()
+  // const [isDelete, setIsDelete] = useState<boolean>(false)
+  // const { cryptoKey } = useEncrypt()
+  // const { updateGastoDiario, getTotalExpense } = useGastosVarios()
+  // const { categories } = useCategories()
 
-  useEffect(() => {
-    const getExpenses = async () => {
-      const encryptedExpenses = await getDataFromLocalStorage<{ encryptedData: string, iv: string }>('expenses')
+  // useEffect(() => {
+  //   const getExpenses = async () => {
+  //     const encryptedExpenses = await getDataFromLocalStorage<{ encryptedData: string, iv: string }>('expenses')
 
-      if (encryptedExpenses) {
-        const { encryptedData, iv } = encryptedExpenses
-        const decryptedExpenses = await decryptData(cryptoKey as CryptoKey, encryptedData, iv)
-        setExpenses(decryptedExpenses)
-        updateGastoDiario(getTotalExpense(decryptedExpenses))
-      }
-    }
+  //     if (encryptedExpenses) {
+  //       const { encryptedData, iv } = encryptedExpenses
+  //       const decryptedExpenses = await decryptData(cryptoKey as CryptoKey, encryptedData, iv)
+  //       setExpenses(decryptedExpenses)
+  //       updateGastoDiario(getTotalExpense(decryptedExpenses))
+  //     }
+  //   }
 
-    if (cryptoKey) getExpenses()
+  //   if (cryptoKey) getExpenses()
 
-  }, [cryptoKey])
+  // }, [cryptoKey])
 
-  const handleEdit = (index: number, key: keyof typeof expenses[number], value: string) => {
-    const newData = [...expenses]
+  // const handleEdit = (index: number, key: keyof typeof expenses[number], value: string) => {
+  //   const newData = [...expenses]
 
-    const parseFloatValue = (value: string) => {
-      const parsedValue = parseFloat(value)
-      return isNaN(parsedValue) ? 0 : parsedValue
-    }
+  //   const parseFloatValue = (value: string) => {
+  //     const parsedValue = parseFloat(value)
+  //     return isNaN(parsedValue) ? 0 : parsedValue
+  //   }
 
-    const newValue = key === 'amount' ? parseFloatValue(value) : value
+  //   const newValue = key === 'amount' ? parseFloatValue(value) : value
 
-    newData[index] = { ...newData[index], [key]: newValue }
-    setExpenses(newData)
-  }
+  //   newData[index] = { ...newData[index], [key]: newValue }
+  //   setExpenses(newData)
+  // }
 
-  const handleAddExpense = () => {
-    addExpense({ date: getDate(), description: "", category: "", amount: 0 })
-  }
+  // const handleAddExpense = () => {
+  //   addExpense({ date: getDate(), description: "", category: "", amount: 0 })
+  // }
 
-  const handleDeleteExpense = (index: number) => {
-    removeExpense(index)
-    setIsDelete(true)
-  }
+  // const handleDeleteExpense = (index: number) => {
+  //   removeExpense(index)
+  //   setIsDelete(true)
+  // }
 
-  const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>, key: keyof typeof expenses[number]) => {
-    if (e.key !== 'Enter') return
+  // const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>, key: keyof typeof expenses[number]) => {
+  //   if (e.key !== 'Enter') return
 
-    if (key === 'amount') {
-      handleAddExpense()
-    } else {
-      (e.target as HTMLInputElement).blur()
-    }
-  }
+  //   if (key === 'amount') {
+  //     handleAddExpense()
+  //   } else {
+  //     (e.target as HTMLInputElement).blur()
+  //   }
+  // }
 
   return (
     <BentoItemContainer className={className}>
@@ -104,17 +104,30 @@ export const TablaGastos = ({ className }: { className?: string }) => {
                 <td key={`${index}-${colIndex}`} className="border-custom-dark-gray text-custom-light-gray text-base">
                   {
                     key === 'date'
-                      ? <DatePicker value={value as string} onChange={(date) => handleEdit(index, 'date', date)} />
+                      ? <DatePicker 
+                      value={value as string} 
+                      onChange={() => {}} 
+                      // onChange={(date) => handleEdit(index, 'date', date)} 
+                      />
                       : key === 'category'
-                        ? <SelectDropdown values={categories} selectedValue= {value ? value as string : "otro"} setSelectedValue={(value) => handleEdit(index, 'category', value)} />
+                        ? <SelectDropdown 
+                        values={categories} 
+                        selectedValue= {value ? value as string : "otro"} 
+                        setSelectedValue={() => {}} 
+                        // setSelectedValue={(value) => handleEdit(index, 'category', value)} 
+                        />
                         : <InputItemTable
-                          onKeyDown={(e) => handleKeyDown(e, key as keyof Expense)}
+                          onKeyDown={() => {}}
+                          // onKeyDown={(e) => handleKeyDown(e, key as keyof Expense)}
                           index={index}
                           fieldKey={key as keyof Expense}
                           value={value}
-                          handleEdit={handleEdit}
-                          isDelete={isDelete}
-                          setIsDelete={setIsDelete}
+                          // handleEdit={handleEdit}
+                          // isDelete={isDelete}
+                          // setIsDelete={setIsDelete}
+                          handleEdit={() => {}}
+                          isDelete={false}
+                          setIsDelete={() => {}}
                         />
                   }
                 </td>
@@ -123,7 +136,9 @@ export const TablaGastos = ({ className }: { className?: string }) => {
               <td className="border-custom-dark-gray text-center">
                 <IconButton
                   className="inline-block text-transparent group-hover:text-custom-light-gray transition-all ease-out duration-700 group-hover:duration-200"
-                  onClick={() => handleDeleteExpense(index)}>
+                  // onClick={() => handleDeleteExpense(index)}
+                  onClick={() => {}}
+                  >
                   <TrashIcon className="size-6" />
                 </IconButton>
               </td>
@@ -133,7 +148,7 @@ export const TablaGastos = ({ className }: { className?: string }) => {
       </table>
       <button
         className="w-full p-1 hover:p-4 transition-all flex items-center justify-center gap-1 rounded-b-2xl border border-custom-dark-gray"
-        onClick={handleAddExpense}
+        // onClick={handleAddExpense}
       >
         <PlusIcon />
       </button>
