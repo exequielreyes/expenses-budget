@@ -21,9 +21,12 @@ export const getDailyExpensesByUser = async ({ email }: { email: string }) => {
         description,
         categories(name),
         amount,
-        users(email)
+        users!inner(email)
       `)
       .eq('users.email', email)
+
+
+    console.log(data)
 
     if (error) {
       console.error('Error al obtener los gastos diarios:', error.message)
