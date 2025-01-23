@@ -6,10 +6,27 @@ export const getSalaryByUser = async ({ email }: { email: string }) => {
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
 
   try {
+    const currentDate = new Date()
+    const currentYear = currentDate.getFullYear()
+    const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0')
+
+    const startOfMonth = `${currentYear}-${currentMonth}-01`
+    const startOfNextMonth = new Date(currentYear, currentDate.getMonth() + 1, 1)
+      .toISOString()
+      .split('T')[0]
+
     const { data, error } = await supabase
-      .from('users')
-      .select('salary')
-      .eq('email', email)
+      .from('salaries')
+      .select(`
+        salary,
+        users!inner(email)
+      `)
+      .eq('users.email', email)
+      .gte('month', startOfMonth)
+      .lt('month', startOfNextMonth)
+
+
+    console.log(data)
 
     // const { data, error } = salary
 
