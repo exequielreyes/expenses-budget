@@ -4,7 +4,7 @@
 import DailyExpensesSection from "@components/dashboard/DailyExpensesSection";
 import ExpensesTableSection from "@components/dashboard/ExpensesTableSection";
 import { SalarySection } from "@components/dashboard/SalarySection";
-// import { ExpensesMenu } from "@components/ExpensesMenu";
+import { ExpensesMenu } from "@components/ExpensesMenu";
 // import { useEncrypt, useGastoTotal, useIngresos, useMiscellaneousExpenses, useStupidExpenses } from "@hooks";
 // import { useIngresos } from "@hooks";
 // import { decryptData, generateKey, getCryptoKeyFromDB, getDataFromLocalStorage, saveCryptoKeyToDB } from "@utils";
@@ -64,7 +64,7 @@ export default async function Dashboard() {
   return (
     <main className="m-auto max-w-[1670px]">
       <div className="py-4 w-full h-full flex flex-col gap-4">
-        {/* <ExpensesMenu /> */}
+        <ExpensesMenu />
         <div className="grid grid-cols-19 grid-rows-12 gap-6">
           <ExpensesTableSection />
           <div className="flex flex-col gap-6 row-start-1 col-start-9 row-span-12 col-span-11">

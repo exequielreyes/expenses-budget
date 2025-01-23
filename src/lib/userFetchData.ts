@@ -1,19 +1,10 @@
+import { supabase } from "./supabaseClient"
+
 // import { salary } from '@mocking/userMock'
-import { createClient } from "@supabase/supabase-js"
-
-export const getSalaryByUser = async ({ email }: { email: string }) => {
-
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+export const getSalaryByUser = async ({ email, date }: { email: string, date: string }) => {
 
   try {
-    const currentDate = new Date()
-    const currentYear = currentDate.getFullYear()
-    const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0')
-
-    const startOfMonth = `${currentYear}-${currentMonth}-01`
-    const startOfNextMonth = new Date(currentYear, currentDate.getMonth() + 1, 1)
-      .toISOString()
-      .split('T')[0]
+    const { startOfMonth, startOfNextMonth } = getMonthRange(date)
 
     const { data, error } = await supabase
       .from('salaries')
@@ -26,7 +17,7 @@ export const getSalaryByUser = async ({ email }: { email: string }) => {
       .lt('month', startOfNextMonth)
 
 
-    console.log(data)
+    // console.log(data)
 
     // const { data, error } = salary
 
@@ -39,10 +30,24 @@ export const getSalaryByUser = async ({ email }: { email: string }) => {
       console.log('No se encontraron categorías')
       return 0
     }
-    return data[0].salary
 
+    return data[0].salary
   } catch (error) {
     console.log(error)
     return 0
+  }
+}
+
+function getMonthRange(date: string) {
+  const inputDate = new Date(date)
+
+  const startOfMonth = new Date(inputDate.getUTCFullYear(), inputDate.getUTCMonth(), 1)
+  const startOfNextMonth = new Date(inputDate.getUTCFullYear(), inputDate.getUTCMonth() + 1, 1)
+
+  const formatDate = (date: Date) => date.toISOString().split('T')[0]
+
+  return {
+    startOfMonth: formatDate(startOfMonth),
+    startOfNextMonth: formatDate(startOfNextMonth),
   }
 }
