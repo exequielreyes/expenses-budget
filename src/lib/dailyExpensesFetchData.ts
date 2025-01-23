@@ -1,5 +1,6 @@
-import { createClient } from "@supabase/supabase-js"
+// import { createClient } from "@supabase/supabase-js"
 import { Expense } from "@/types/types"
+import { dailyEx } from "@/mocking/dailyExpensesMock"
 
 type DailyExpense = {
   date: string
@@ -11,22 +12,21 @@ type DailyExpense = {
 
 export const getDailyExpensesByUser = async ({ email }: { email: string }) => {
 
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+  // const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
 
   try {
-    const { data, error } = await supabase
-      .from('daily_expenses')
-      .select(`
-        date,
-        description,
-        categories(name),
-        amount,
-        users!inner(email)
-      `)
-      .eq('users.email', email)
+    // const { data, error } = await supabase
+    //   .from('daily_expenses')
+    //   .select(`
+    //     date,
+    //     description,
+    //     categories(name),
+    //     amount,
+    //     users!inner(email)
+    //   `)
+    //   .eq('users.email', email)
 
-
-    console.log(data)
+    const { data, error } = dailyEx
 
     if (error) {
       console.error('Error al obtener los gastos diarios:', error.message)

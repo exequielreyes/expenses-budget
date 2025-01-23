@@ -1,3 +1,4 @@
+// import { salary } from '@mocking/userMock'
 import { createClient } from "@supabase/supabase-js"
 
 export const getSalaryByUser = async ({ email }: { email: string }) => {
@@ -10,14 +11,16 @@ export const getSalaryByUser = async ({ email }: { email: string }) => {
       .select('salary')
       .eq('email', email)
 
+    // const { data, error } = salary
+
     if (error) {
       console.log(error)
-      return
+      return 0
     }
 
     if (!data) {
       console.log('No se encontraron categorías')
-      return
+      return 0
     }
     return data[0].salary
 

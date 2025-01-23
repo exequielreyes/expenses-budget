@@ -9,6 +9,6 @@ export const SalarySection = async () => {
   const sueldo = await getSalaryByUser({ email })
 
   return (
-    <SalarySectionItem sueldo={sueldo} />
+    <SalarySectionItem sueldo={sueldo} email={email} />
   )
 }
