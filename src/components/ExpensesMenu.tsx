@@ -4,8 +4,10 @@ import { SelectDropdown } from "@components/SelectDropdown";
 import { BentoItemContainer } from "@components/BentoItemContainer";
 import { getMonth, getYear } from "@utils/getCurrentDate";
 import { useEffect, useState } from "react";
-import { getSalaryByUser } from "@lib/userFetchData";
+import { getSalaryByUserAndDate } from "@lib/userFetchData";
 import { useGlobalContext } from "@context/GlobalContext";
+import { getDailyExpensesByUserAndDate } from "@lib/dailyExpensesFetchData";
+import { useExpenses, useIngresos } from "@hooks";
 
 const months = [
   { value: "01", label: "Enero" },
@@ -28,31 +30,41 @@ const years = [
 ];
 
 export const ExpensesMenu = () => {
+  const { userData, setSelectedDate } = useGlobalContext()
+  const { setExpenses } = useExpenses()
+  const { updateSueldo } = useIngresos()
 
-  const [selectedMonth, setSelectedMonth] = useState(getMonth().toString())
-  const [selectedYear, setSelectedYear] = useState(getYear().toString())
-
-  const { userData, updateSueldo } = useGlobalContext()
+  const [selectedMonth, setSelectedMonth] = useState<string>(getMonth())
+  const [selectedYear, setSelectedYear] = useState<string>(getYear())
 
   useEffect(() => {
-
     const email = userData?.email as string
-    console.log(userData)
     const date = `${selectedYear}-${selectedMonth}-01`
-    console.log(date)
+    setSelectedDate(date)
 
     const getSalary = async () => {
-
-      const salary = await getSalaryByUser({ email, date })
-      console.log(salary)
+      const salary = await getSalaryByUserAndDate({ email, date })
       updateSueldo(salary)
+    }
+
+    const getDailyExpenses = async () => {
+      const dailyExpenses = await getDailyExpensesByUserAndDate({ email, date })
+      console.log('email', email)
+      console.log('date', date)
+      console.log('dailyExpenses')
+      console.log(dailyExpenses)
+
+      if (dailyExpenses) {
+        setExpenses(dailyExpenses)
+      }
     }
 
     if (email && selectedMonth && selectedYear) {
       getSalary()
+      getDailyExpenses()
     }
 
-  }, [selectedMonth, selectedYear, userData])
+  }, [selectedMonth, selectedYear])
 
   return (
     <BentoItemContainer>

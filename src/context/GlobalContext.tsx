@@ -2,6 +2,7 @@
 
 import { useExpensesReducer, useGastosVariosReducer, useIngresosReducer, useMiscellaneousExpensesReducer, useStupidExpensesReducer } from '@/reducers'
 import { Expense, OtherExpense, Transactions, UserData } from '@/types/types'
+import { getDate } from '@utils'
 import { createContext, useContext, ReactNode, useState } from 'react'
 
 interface GlobalContextType {
@@ -16,7 +17,7 @@ interface GlobalContextType {
   updateGastoDiario: (newContent: number) => void,
   updateGastoFijo: (newContent: number) => void,
   ingresos: Transactions,
-  updateSueldo:  (newAmount: number) => void,
+  updateSueldo: (newAmount: number) => void,
   gastoTotal: number,
   setGastoTotal: (newAmount: number) => void,
   miscellaneousExpenses: OtherExpense[],
@@ -28,7 +29,9 @@ interface GlobalContextType {
   addStupidExpense: (stupidExpense: OtherExpense) => void,
   removeStupidExpense: (index: number) => void,
   userData: UserData | null,
-  setUserData: (userData: UserData | null) => void
+  setUserData: (userData: UserData | null) => void,
+  selectedDate: string,
+  setSelectedDate: (selectedDate: string) => void
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined)
@@ -37,7 +40,8 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [cryptoKey, setCryptoKey] = useState<CryptoKey>()
   const [gastoTotal, setGastoTotal] = useState<number>(0)
   const [userData, setUserData] = useState<UserData | null>(null)
-  
+  const [selectedDate, setSelectedDate] = useState<string>(getDate())
+
   const { expenses, setExpenses, addExpense, removeExpense } = useExpensesReducer()
   const { miscellaneousExpenses, setMiscellaneousExpenses, addMiscellaneousExpense, removeMiscellaneousExpense } = useMiscellaneousExpensesReducer()
   const { stupidExpenses, setStupidExpenses, addStupidExpense, removeStupidExpense } = useStupidExpensesReducer()
@@ -69,7 +73,9 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
       addStupidExpense,
       removeStupidExpense,
       userData,
-      setUserData
+      setUserData,
+      selectedDate,
+      setSelectedDate
     }}>
       {children}
     </GlobalContext.Provider>

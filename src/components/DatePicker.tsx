@@ -15,7 +15,7 @@ import {
 import { es } from "date-fns/locale/es"
 
 export function DatePicker({value, onChange}: {value: string, onChange: (date: string) => void}) {
-  const [date, setDate] = React.useState<Date>(new Date(value))
+  const [date, setDate] = React.useState<Date>(new Date(value + 'T00:00:00'))
 
 
   const handleChange = (date: Date) => {

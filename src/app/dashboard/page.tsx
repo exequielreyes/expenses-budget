@@ -71,7 +71,6 @@ export default async function Dashboard() {
             <div className="flex gap-6">
               <div className="flex flex-col gap-6">
                 <SalarySection />
-                <DailyExpensesSection />
 
                 {/* <LargeNumber
                   title="Gasto total"

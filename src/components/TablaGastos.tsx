@@ -7,13 +7,21 @@ import { CalendarIcon, CategoryIcon, DescriptionIcon, DolarIcon, PlusIcon, Trash
 import { Expense } from "../types/types"
 // import { useEffect, useState } from "react"
 import { SelectDropdown } from "./SelectDropdown"
+import { useExpenses } from "@hooks"
+import { useEffect } from "react"
 // import { useCategories } from "@hooks/useCategories"
 
 // TODO: Refactorizar esto
 
-export const TablaGastos = ({ expenses, categories, className }: { expenses: Expense[], categories: { value: string; label: string; }[], className?: string }) => {
+export const TablaGastos = ({ initialExpenses, categories, className }: { initialExpenses: Expense[], categories: { value: string; label: string; }[], className?: string }) => {
 
-  // const { expenses, setExpenses, addExpense, removeExpense } = useExpenses()
+  const { expenses, setExpenses } = useExpenses()
+
+  useEffect(() => {
+    setExpenses(initialExpenses)
+  }, [initialExpenses])
+
+
   // const [isDelete, setIsDelete] = useState<boolean>(false)
   // const { cryptoKey } = useEncrypt()
   // const { updateGastoDiario, getTotalExpense } = useGastosVarios()
@@ -104,20 +112,20 @@ export const TablaGastos = ({ expenses, categories, className }: { expenses: Exp
                 <td key={`${index}-${colIndex}`} className="border-custom-dark-gray text-custom-light-gray text-base">
                   {
                     key === 'date'
-                      ? <DatePicker 
-                      value={value as string} 
-                      onChange={() => {}} 
+                      ? <DatePicker
+                        value={value as string}
+                        onChange={() => { }}
                       // onChange={(date) => handleEdit(index, 'date', date)} 
                       />
                       : key === 'category'
-                        ? <SelectDropdown 
-                        values={categories} 
-                        selectedValue= {value ? value as string : "otro"} 
-                        setSelectedValue={() => {}} 
+                        ? <SelectDropdown
+                          values={categories}
+                          selectedValue={value ? value as string : "otro"}
+                          setSelectedValue={() => { }}
                         // setSelectedValue={(value) => handleEdit(index, 'category', value)} 
                         />
                         : <InputItemTable
-                          onKeyDown={() => {}}
+                          onKeyDown={() => { }}
                           // onKeyDown={(e) => handleKeyDown(e, key as keyof Expense)}
                           index={index}
                           fieldKey={key as keyof Expense}
@@ -125,9 +133,9 @@ export const TablaGastos = ({ expenses, categories, className }: { expenses: Exp
                           // handleEdit={handleEdit}
                           // isDelete={isDelete}
                           // setIsDelete={setIsDelete}
-                          handleEdit={() => {}}
+                          handleEdit={() => { }}
                           isDelete={false}
-                          setIsDelete={() => {}}
+                          setIsDelete={() => { }}
                         />
                   }
                 </td>
@@ -137,8 +145,8 @@ export const TablaGastos = ({ expenses, categories, className }: { expenses: Exp
                 <IconButton
                   className="inline-block text-transparent group-hover:text-custom-light-gray transition-all ease-out duration-700 group-hover:duration-200"
                   // onClick={() => handleDeleteExpense(index)}
-                  onClick={() => {}}
-                  >
+                  onClick={() => { }}
+                >
                   <TrashIcon className="size-6" />
                 </IconButton>
               </td>
@@ -148,7 +156,7 @@ export const TablaGastos = ({ expenses, categories, className }: { expenses: Exp
       </table>
       <button
         className="w-full p-1 hover:p-4 transition-all flex items-center justify-center gap-1 rounded-b-2xl border border-custom-dark-gray"
-        // onClick={handleAddExpense}
+      // onClick={handleAddExpense}
       >
         <PlusIcon />
       </button>

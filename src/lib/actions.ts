@@ -1,27 +1,34 @@
 'use server'
 
 import { z } from "zod"
-import { createClient } from "@supabase/supabase-js"
-import { revalidatePath } from "next/cache"
+// import { revalidatePath } from "next/cache"
+import { getMonthRange } from "@utils/getMonthRange"
+import { supabase } from "./supabaseClient"
+import { getIdByEmail } from "./userFetchData"
+
+const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
 const UpdateSalarySchema = z.object({
   salary: z.number().min(0),
-  email: z.string().email()
-})
+  email: z.string().email(),
+  date: z.string().refine((val) => dateRegex.test(val), {
+    message: 'La fecha debe estar en el formato YYYY-MM-DD',
+  }),
+});
 
-export async function updateSalary(email: string, salary: number) {
+export async function updateSalary({ email, salary, date }: { email: string, salary: number, date: string }) {
   try {
-    UpdateSalarySchema.parse({ email, salary })
+    UpdateSalarySchema.parse({ email, salary, date })
+    const { startOfMonth, startOfNextMonth } = getMonthRange(date)
 
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    )
+    const userId = await getIdByEmail(email)
 
     const { data, error } = await supabase
-      .from('users')
+      .from('salaries')
       .update({ salary })
-      .eq('email', email)
+      .eq('user_id', userId)
+      .gte('month', startOfMonth)
+      .lt('month', startOfNextMonth)
       .select()
 
     if (error) {
@@ -34,8 +41,8 @@ export async function updateSalary(email: string, salary: number) {
       return { error: true, message: 'No se encontraron usuarios' }
     }
 
-    revalidatePath('/dashboard')
-    return { success: true, data }
+    // revalidatePath('/dashboard')
+    return { success: true, salary: data[0].salary }
   } catch (error) {
     if (error instanceof z.ZodError) {
       console.log('Errores de validación:', error.errors)

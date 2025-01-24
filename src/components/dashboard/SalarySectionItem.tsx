@@ -2,21 +2,21 @@
 
 import LargeNumber from "@/components/LargeNumber"
 import { EditSalaryDialog } from "@components/EditSalaryDialog"
-import { useGlobalContext } from "@context/GlobalContext"
+import { useIngresos } from "@hooks"
 import { useEffect } from "react"
 
-export default function SalarySectionItem({ sueldo, email }: Readonly<{ sueldo: number, email: string }>) {
+export default function SalarySectionItem({ initialSalary, email }: Readonly<{ initialSalary: number, email: string }>) {
 
-  const { updateSueldo, ingresos } = useGlobalContext()
-  
+  const { updateSueldo, sueldo } = useIngresos()
+
   useEffect(() => {
-    updateSueldo(sueldo)
-  },[sueldo])
+    updateSueldo(initialSalary)
+  }, [initialSalary])
 
   return (
     <LargeNumber
       title="Sueldo"
-      amount={ingresos.find(item => item.title === "sueldo")?.amount as number}
+      amount={sueldo}
       amountType="ingreso"
       edit
       customDialog={<EditSalaryDialog amount={sueldo} email={email} />}

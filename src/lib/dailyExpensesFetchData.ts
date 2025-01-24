@@ -1,6 +1,7 @@
 import { Expense } from "@/types/types"
 // import { dailyEx } from "@/mocking/dailyExpensesMock"
 import { supabase } from "./supabaseClient"
+import { getMonthRange } from "@utils/getMonthRange"
 
 type DailyExpense = {
   date: string
@@ -10,9 +11,11 @@ type DailyExpense = {
   categories: { name: string }
 }
 
-export const getDailyExpensesByUser = async ({ email }: { email: string }) => {
+export const getDailyExpensesByUserAndDate = async ({ email, date }: { email: string, date: string }) => {
 
   try {
+    const { startOfMonth, startOfNextMonth } = getMonthRange(date)
+
     const { data, error } = await supabase
       .from('daily_expenses')
       .select(`
@@ -23,6 +26,9 @@ export const getDailyExpensesByUser = async ({ email }: { email: string }) => {
         users!inner(email)
       `)
       .eq('users.email', email)
+      .filter('date', 'gte', startOfMonth)
+      .lt('date', startOfNextMonth)
+
 
     // const { data, error } = dailyEx
 

@@ -16,19 +16,24 @@ import { Edit } from "lucide-react"
 import { updateSalary } from "@lib/actions"
 import { useState } from "react"
 import { toast } from "sonner"
+import { useGlobalContext } from "@context/GlobalContext"
+import { useIngresos } from "@hooks"
 
 export function EditSalaryDialog({ amount, email }: Readonly<{ amount: number, email: string }>) {
 
+  const { selectedDate } = useGlobalContext()
+  const { updateSueldo } = useIngresos()
   const [amountEdit, setAmountEdit] = useState<number>(amount)
 
   const handleClickGuardar = async () => {
     const promise = async () => {
-      const result = await updateSalary(email, amountEdit)
+      const result = await updateSalary({ email, salary: amountEdit, date: selectedDate })
 
       if (result.error) {
         throw new Error('Error al guardar el salario')
       }
-
+      
+      updateSueldo(result.salary)
       return { message: 'Salario actualizado exitosamente' }
     }
 
